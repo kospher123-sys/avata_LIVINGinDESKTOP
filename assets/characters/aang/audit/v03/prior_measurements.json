@@ -1,0 +1,379 @@
+{
+  "files": [
+    {
+      "file": "image(20261108-095639).png",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "format": "PNG",
+      "alpha_min": 255,
+      "alpha_max": 255,
+      "transparent": 0,
+      "partial": 0,
+      "opaque": 1573538,
+      "sha256": "8345b47e66fe1d09430043277bcc3424839674584cbb3c44d5f82cd4c2dfafda"
+    },
+    {
+      "file": "image(20261108-095636).png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "format": "PNG",
+      "alpha_min": 255,
+      "alpha_max": 255,
+      "transparent": 0,
+      "partial": 0,
+      "opaque": 1572864,
+      "sha256": "5d8f85ab6e6fa911c96339212c32b3019f9142ef64234c11c87bbe7b7db7435d"
+    },
+    {
+      "preview": "idle",
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "loop": 0
+    },
+    {
+      "preview": "walk",
+      "frames": 6,
+      "durations": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120
+      ],
+      "loop": 0
+    }
+  ],
+  "grid_x": [
+    0,
+    296,
+    591,
+    887,
+    1183,
+    1478,
+    1774
+  ],
+  "grid_y": [
+    0,
+    444,
+    887
+  ],
+  "frames": [
+    {
+      "frame": "idle_01",
+      "cell": [
+        0,
+        0,
+        296,
+        444
+      ],
+      "cell_size": [
+        296,
+        444
+      ],
+      "estimated_bbox": [
+        98,
+        24,
+        199,
+        418
+      ],
+      "warm_pixels": 25019,
+      "main_pixels": 25019,
+      "outside_main_warm_pixels": 0,
+      "width": 101,
+      "height": 394,
+      "center_x": 148.0,
+      "head_y": 24,
+      "foot_y": 417
+    },
+    {
+      "frame": "idle_02",
+      "cell": [
+        296,
+        0,
+        591,
+        444
+      ],
+      "cell_size": [
+        295,
+        444
+      ],
+      "estimated_bbox": [
+        99,
+        24,
+        201,
+        418
+      ],
+      "warm_pixels": 24830,
+      "main_pixels": 24830,
+      "outside_main_warm_pixels": 0,
+      "width": 102,
+      "height": 394,
+      "center_x": 149.5,
+      "head_y": 24,
+      "foot_y": 417
+    },
+    {
+      "frame": "idle_03",
+      "cell": [
+        591,
+        0,
+        887,
+        444
+      ],
+      "cell_size": [
+        296,
+        444
+      ],
+      "estimated_bbox": [
+        100,
+        24,
+        202,
+        418
+      ],
+      "warm_pixels": 24967,
+      "main_pixels": 24967,
+      "outside_main_warm_pixels": 0,
+      "width": 102,
+      "height": 394,
+      "center_x": 150.5,
+      "head_y": 24,
+      "foot_y": 417
+    },
+    {
+      "frame": "idle_04",
+      "cell": [
+        887,
+        0,
+        1183,
+        444
+      ],
+      "cell_size": [
+        296,
+        444
+      ],
+      "estimated_bbox": [
+        99,
+        24,
+        199,
+        418
+      ],
+      "warm_pixels": 24701,
+      "main_pixels": 24701,
+      "outside_main_warm_pixels": 0,
+      "width": 100,
+      "height": 394,
+      "center_x": 148.5,
+      "head_y": 24,
+      "foot_y": 417
+    },
+    {
+      "frame": "idle_05",
+      "cell": [
+        1183,
+        0,
+        1478,
+        444
+      ],
+      "cell_size": [
+        295,
+        444
+      ],
+      "estimated_bbox": null,
+      "warm_pixels": 0,
+      "main_pixels": 0,
+      "outside_main_warm_pixels": 0
+    },
+    {
+      "frame": "idle_06",
+      "cell": [
+        1478,
+        0,
+        1774,
+        444
+      ],
+      "cell_size": [
+        296,
+        444
+      ],
+      "estimated_bbox": null,
+      "warm_pixels": 0,
+      "main_pixels": 0,
+      "outside_main_warm_pixels": 0
+    },
+    {
+      "frame": "walk_01",
+      "cell": [
+        0,
+        444,
+        296,
+        887
+      ],
+      "cell_size": [
+        296,
+        443
+      ],
+      "estimated_bbox": [
+        42,
+        25,
+        284,
+        414
+      ],
+      "warm_pixels": 33957,
+      "main_pixels": 33957,
+      "outside_main_warm_pixels": 0,
+      "width": 242,
+      "height": 389,
+      "center_x": 162.5,
+      "head_y": 25,
+      "foot_y": 413
+    },
+    {
+      "frame": "walk_02",
+      "cell": [
+        296,
+        444,
+        591,
+        887
+      ],
+      "cell_size": [
+        295,
+        443
+      ],
+      "estimated_bbox": [
+        75,
+        25,
+        223,
+        413
+      ],
+      "warm_pixels": 27730,
+      "main_pixels": 27730,
+      "outside_main_warm_pixels": 0,
+      "width": 148,
+      "height": 388,
+      "center_x": 148.5,
+      "head_y": 25,
+      "foot_y": 412
+    },
+    {
+      "frame": "walk_03",
+      "cell": [
+        591,
+        444,
+        887,
+        887
+      ],
+      "cell_size": [
+        296,
+        443
+      ],
+      "estimated_bbox": [
+        82,
+        25,
+        218,
+        414
+      ],
+      "warm_pixels": 25972,
+      "main_pixels": 25972,
+      "outside_main_warm_pixels": 0,
+      "width": 136,
+      "height": 389,
+      "center_x": 149.5,
+      "head_y": 25,
+      "foot_y": 413
+    },
+    {
+      "frame": "walk_04",
+      "cell": [
+        887,
+        444,
+        1183,
+        887
+      ],
+      "cell_size": [
+        296,
+        443
+      ],
+      "estimated_bbox": [
+        39,
+        25,
+        281,
+        414
+      ],
+      "warm_pixels": 33705,
+      "main_pixels": 33705,
+      "outside_main_warm_pixels": 0,
+      "width": 242,
+      "height": 389,
+      "center_x": 159.5,
+      "head_y": 25,
+      "foot_y": 413
+    },
+    {
+      "frame": "walk_05",
+      "cell": [
+        1183,
+        444,
+        1478,
+        887
+      ],
+      "cell_size": [
+        295,
+        443
+      ],
+      "estimated_bbox": [
+        78,
+        26,
+        210,
+        416
+      ],
+      "warm_pixels": 26313,
+      "main_pixels": 26313,
+      "outside_main_warm_pixels": 0,
+      "width": 132,
+      "height": 390,
+      "center_x": 143.5,
+      "head_y": 26,
+      "foot_y": 415
+    },
+    {
+      "frame": "walk_06",
+      "cell": [
+        1478,
+        444,
+        1774,
+        887
+      ],
+      "cell_size": [
+        296,
+        443
+      ],
+      "estimated_bbox": [
+        97,
+        25,
+        219,
+        414
+      ],
+      "warm_pixels": 25197,
+      "main_pixels": 25197,
+      "outside_main_warm_pixels": 0,
+      "width": 122,
+      "height": 389,
+      "center_x": 157.5,
+      "head_y": 25,
+      "foot_y": 413
+    }
+  ],
+  "original_hashes_unchanged": true
+}

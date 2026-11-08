@@ -1,0 +1,22 @@
+{
+  "spritesheet_6x2.png": "c19d330156f0000b180fc60eedaf309e446b286f2aa5a1f591602eb38e71a7e0",
+  "보정리포트.md": "13a474b3552041ccbe3394e025e1238e6d60f4bc286167afa3c4a850ad68ecc3",
+  "data\\correct_assets.py": "dee45ffdd8cd1ddef51e130912d7397c3b803eaaf272c2865c5ee0bdb2e60ba4",
+  "data\\prior_measurements.json": "40c2f9258e1af9434104d366c71f7dff6560e31ff5753fbc8a7a06b29ae37bcd",
+  "data\\validation.json": "fcc77bdc59ef3bd1ff9cdac4bfba756ac06bd2c9467b0cc5a14d9098e4fd45df",
+  "frames\\idle_01.png": "a4f516541f810e6a5b1630fd48b38971068d6b2d0274e856cbb13a4673b2293e",
+  "frames\\idle_02.png": "fc4d7f8cdc4d92e359c605f54cef856523e426f4b6d50c3a7452f7b843cbb858",
+  "frames\\idle_03.png": "b3e3b1e6790e69f0f89f02b8259e4d1bcfd2848c55a3a4b2548e3dd6f0e2f16f",
+  "frames\\idle_04.png": "24ec35a7aa6fc0bd2dc98b400c4ccd7c73f24e9f2389308014f82563d9551281",
+  "frames\\walk_01.png": "f842faa2cdf11879c2c61ef99b5a2e4ab627b02c69bc0d88801005a2b4bae096",
+  "frames\\walk_02.png": "3d0e77b34d1597a13f9513f5b6b6305b015b24a10cfc16548462f812325e222e",
+  "frames\\walk_03.png": "49f00b27510988227145418a803e36327875fad972d2bd6e3848f7e1ba989104",
+  "frames\\walk_04.png": "5e9d3c372cfbf22f19d3aa155fc5dd61e74f97d63749966eac730fcba0f45a7d",
+  "frames\\walk_05.png": "8b755cd93dfdadab241b3a889de3a85574fe3740b914dcd82ea694b9e1220b62",
+  "frames\\walk_06.png": "6ba96b90bbabd1c6f9c1f9d7e5acbe7e0cc803910932df2d1c492fd8491e62da",
+  "originals\\image(20261108-100354).png": "8345b47e66fe1d09430043277bcc3424839674584cbb3c44d5f82cd4c2dfafda",
+  "originals\\image(20261108-100427).png": "fb3a24e680696de53d5681faf8205cfe04d4046b8c4e5da0bcc2b6fd93ca9b45",
+  "previews\\contact_dark.png": "dda010db3871173276f9972693ead53a13086b6835ecd927c6e1184bc1634af1",
+  "previews\\idle_preview.gif": "92969d2511a887af1b4d4c862add7045c91b516bd235538dd6caac86226075a7",
+  "previews\\walk_preview.gif": "47698782e181800db605619b2b03eb4362295b78b0cce8786493017f34e21c12"
+}

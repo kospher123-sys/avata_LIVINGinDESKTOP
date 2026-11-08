@@ -2,7 +2,7 @@
 
 > 작성일: 2026-11-08  
 > 대상: 이미지 기반 애니메이션 준비(v0.3 후보)  
-> 상태: 성인 마스터 확정·원본 저장 / IDLE 4장·WALK 6장 제작 예정 / 앱 적용 전
+> 상태: 성인 마스터 확정·원본 저장 / IDLE 4장·WALK 6장 보정 완료 / 외곽·Windows 검증 및 앱 적용 전
 
 ## 1. 문서의 역할
 
@@ -85,7 +85,7 @@ assets/
 ## 5. 출력 규격과 일관성
 
 - **실제 알파 채널이 있는 투명 PNG(RGBA)**. 흰색·체커보드를 이미지에 그려 넣은 가짜 투명 배경은 불가.
-- 마스터 원본은 **1024 × 1536 px RGBA PNG**로 보존한다. 애니메이션 10장도 동일 캔버스를 기준으로 제작하고 크기·중심축·발 접지선을 맞춘다. 향후 앱용 축소본은 별도로 검수하며 원본을 덮어쓰지 않는다.
+- 마스터 원본은 **1024 × 1536 px RGBA PNG**로 보존한다. 현재 보정 애니메이션 10장은 296×444 공통 캔버스와 기준점 (148,419)를 사용한다. 마스터 원본 규격과 구분한다. 향후 앱용 축소본은 별도로 검수하며 원본을 덮어쓰지 않는다.
 - 모든 이미지의 캐릭터 크기, 수평 중심축, 발 접지선과 여백을 맞춘다. 걷기에 필요한 자연스러운 몸 높이 변화만 허용한다.
 - 머리·손·발·옷자락이 잘리지 않도록 충분한 여백을 확보한다. 프레임별 자동 잘라내기나 개별 크기 맞춤은 하지 않는다.
 - 얼굴, 머리 크기, 신체 비율, 화살표 위치·형태, 의상 구조, 색 팔레트, 선 두께, 명암과 광원을 마스터에 맞춘다.
@@ -133,7 +133,7 @@ No background, floor shadow, effects, props, text, labels, watermark, checkerboa
 Use the attached approved base_reference.png as the fixed character reference.
 Create exactly ONE animation frame, not a sprite sheet or a collage.
 Keep the same face, head size, body proportions, arrow tattoo, outfit construction, palette, outline thickness, shading, lighting, and strict right-facing side-view camera.
-Use the same 1024 x 1536 canvas, character scale, horizontal center, ground baseline, and margins as the master.
+For the current animation frames use a 296 x 444 canvas and shared reference point (148,419). Preserve the approved character scale and torso position across frames; do not independently fit the silhouette to each frame.
 Keep the character in place; do not translate it horizontally across the canvas.
 Allow only the small body motion required by the specified animation phase.
 Full body visible, no cropped limbs. Transparent RGBA PNG with real alpha.
@@ -184,3 +184,10 @@ Keep a real transparent alpha channel. Do not redesign the character or add deta
 - 원본 그대로 참고 자료로 보관했으며 확정 마스터 `base_reference.png`는 유지한다.
 - 진행 상태: IDLE 4장/WALK 6장에 해당하는 시트 시안 수령. 개별 PNG 분리, 실제 알파 투명도·격자선 제거, 캔버스와 발 접지선 정렬, 외형 일관성 및 루프 재생 검수는 미완료다.
 - 밝은 배경과 격자선이 보이므로 런타임용 투명 스프라이트로 바로 적용하지 않는다. 이번 작업은 자료·문서 저장만 수행하며 코드 및 앱 연결은 변경하지 않는다.
+
+
+## 9. v0.3 보정본 반영 — 최신 상태
+
+배경 제거·IDLE 4장/WALK 6장 분리·296×444 공통 캔버스·Y=419 발 기준선 보정 완료. 시트·GIF·메타데이터·검수 보고서를 보존했다. 일부 흰 점과 밝은 외곽 결함, 몸통 앵커·자연스러운 보행·실제 Windows 애니메이션 검증은 남아 있다. 8절은 시트 최초 수령 시점의 기록이다.
+
+[배치·원본 보존·검증 상세](V03_ASSET_IMPORT.md)와 [추가 표준 프롬프트](SPRITE_QUALITY_PROMPT.md)를 따른다. 개별 PNG는 idle/ 및 walk/, 시트는 캐릭터 폴더 루트, 프리뷰는 previews/, 검수 자료는 audit/v03/에 있다.

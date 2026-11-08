@@ -1,0 +1,345 @@
+{
+  "originals": [
+    {
+      "name": "image(20261108-100354).png",
+      "sha256": "8345b47e66fe1d09430043277bcc3424839674584cbb3c44d5f82cd4c2dfafda",
+      "matches_prior_measurement": true
+    },
+    {
+      "name": "image(20261108-100427).png",
+      "sha256": "fb3a24e680696de53d5681faf8205cfe04d4046b8c4e5da0bcc2b6fd93ca9b45",
+      "matches_prior_measurement": false
+    }
+  ],
+  "originals_unchanged": true,
+  "grid_x": [
+    0,
+    296,
+    591,
+    887,
+    1183,
+    1478,
+    1774
+  ],
+  "grid_y": [
+    0,
+    444,
+    887
+  ],
+  "canvas": [
+    296,
+    444
+  ],
+  "anchor": [
+    148,
+    419
+  ],
+  "frames": [
+    {
+      "frame": "idle_01",
+      "source_cell": [
+        0,
+        0,
+        296,
+        444
+      ],
+      "translation": [
+        0,
+        1
+      ],
+      "bbox": [
+        97,
+        24,
+        200,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 105637,
+      "partial": 1171,
+      "opaque": 24616,
+      "warm_pixels": 25019,
+      "warm_retained": 25019,
+      "blue_pixels": 32,
+      "blue_retained": 32,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "idle_02",
+      "source_cell": [
+        296,
+        0,
+        591,
+        444
+      ],
+      "translation": [
+        0,
+        1
+      ],
+      "bbox": [
+        99,
+        24,
+        201,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 105901,
+      "partial": 1109,
+      "opaque": 24414,
+      "warm_pixels": 24830,
+      "warm_retained": 24830,
+      "blue_pixels": 43,
+      "blue_retained": 43,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "idle_03",
+      "source_cell": [
+        591,
+        0,
+        887,
+        444
+      ],
+      "translation": [
+        0,
+        1
+      ],
+      "bbox": [
+        100,
+        24,
+        203,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 105680,
+      "partial": 1217,
+      "opaque": 24527,
+      "warm_pixels": 24967,
+      "warm_retained": 24967,
+      "blue_pixels": 39,
+      "blue_retained": 38,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "idle_04",
+      "source_cell": [
+        887,
+        0,
+        1183,
+        444
+      ],
+      "translation": [
+        0,
+        1
+      ],
+      "bbox": [
+        98,
+        24,
+        200,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 105962,
+      "partial": 1143,
+      "opaque": 24319,
+      "warm_pixels": 24701,
+      "warm_retained": 24701,
+      "blue_pixels": 39,
+      "blue_retained": 39,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_01",
+      "source_cell": [
+        0,
+        444,
+        296,
+        887
+      ],
+      "translation": [
+        0,
+        5
+      ],
+      "bbox": [
+        41,
+        29,
+        285,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 96343,
+      "partial": 1693,
+      "opaque": 33388,
+      "warm_pixels": 33957,
+      "warm_retained": 33957,
+      "blue_pixels": 46,
+      "blue_retained": 46,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_02",
+      "source_cell": [
+        296,
+        444,
+        591,
+        887
+      ],
+      "translation": [
+        0,
+        6
+      ],
+      "bbox": [
+        74,
+        30,
+        224,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 102907,
+      "partial": 1273,
+      "opaque": 27244,
+      "warm_pixels": 27730,
+      "warm_retained": 27730,
+      "blue_pixels": 39,
+      "blue_retained": 38,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_03",
+      "source_cell": [
+        591,
+        444,
+        887,
+        887
+      ],
+      "translation": [
+        0,
+        4
+      ],
+      "bbox": [
+        82,
+        28,
+        219,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 104610,
+      "partial": 1205,
+      "opaque": 25609,
+      "warm_pixels": 25972,
+      "warm_retained": 25972,
+      "blue_pixels": 46,
+      "blue_retained": 46,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_04",
+      "source_cell": [
+        887,
+        444,
+        1183,
+        887
+      ],
+      "translation": [
+        0,
+        5
+      ],
+      "bbox": [
+        38,
+        29,
+        282,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 96464,
+      "partial": 1794,
+      "opaque": 33166,
+      "warm_pixels": 33705,
+      "warm_retained": 33705,
+      "blue_pixels": 40,
+      "blue_retained": 39,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_05",
+      "source_cell": [
+        1183,
+        444,
+        1478,
+        887
+      ],
+      "translation": [
+        0,
+        3
+      ],
+      "bbox": [
+        77,
+        27,
+        210,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 104277,
+      "partial": 1281,
+      "opaque": 25866,
+      "warm_pixels": 26313,
+      "warm_retained": 26313,
+      "blue_pixels": 44,
+      "blue_retained": 43,
+      "opaque_rgb_unchanged": true
+    },
+    {
+      "frame": "walk_06",
+      "source_cell": [
+        1478,
+        444,
+        1774,
+        887
+      ],
+      "translation": [
+        0,
+        5
+      ],
+      "bbox": [
+        96,
+        29,
+        219,
+        420
+      ],
+      "foot_y": 419,
+      "transparent": 105482,
+      "partial": 1169,
+      "opaque": 24773,
+      "warm_pixels": 25197,
+      "warm_retained": 25197,
+      "blue_pixels": 45,
+      "blue_retained": 45,
+      "opaque_rgb_unchanged": true
+    }
+  ],
+  "gif_checks": [
+    {
+      "name": "idle_preview.gif",
+      "frames": 4,
+      "durations": [
+        320,
+        320,
+        320,
+        320
+      ],
+      "loop": 0
+    },
+    {
+      "name": "walk_preview.gif",
+      "frames": 6,
+      "durations": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120
+      ],
+      "loop": 0
+    }
+  ]
+}
