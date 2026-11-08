@@ -97,3 +97,11 @@ Windows 데스크톱 화면에 2D 아바타가 자연스럽게 머물고 생활�
 - 로컬 성공과 GitHub 반영을 명확히 구분
 
 작동 확인 전에는 기능을 완료로 표기하지 않는다. 대규모 구조 변경 전에 안정적으로 동작한 버전을 별도로 보존한다.
+
+## 7. 2026-11-08 후속 작업 — v0.2 코드 업로드 (실행 검증 대기)
+
+- GitHub 신규 파일: `prototype_v0_2/main.py`, `prototype_v0_2/avatar.py`, `prototype_v0_2/overlay.py`, `prototype_v0_2/README.md`, 루트 `.gitignore`.
+- `Avatar` 모델에서 `IDLE`/`WALK` 상태와 시간 기반 위치 갱신을 처리하고, PySide6 창과 렌더링을 분리함.
+- 기존 로컬 v0.1 `main.py`는 건드리지 않도록 별도 폴더에서 실행하도록 함.
+- v0.2 코드는 **GitHub에 업로드됐지만 사용자 Windows PC에서 아직 실행 검증되지 않았음**. 정상 작동 확인 후 상태를 완료로 변경할 것.
+- 다음 검증 명령: `python prototype_v0_2/main.py` (저장소 루트에서 가상환경 활성화 후).
