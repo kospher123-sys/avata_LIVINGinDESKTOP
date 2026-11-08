@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "clips": {
+    "idle": {
+      "directory": "frames_v04/side_idle",
+      "prefix": "side_idle",
+      "canvas": [
+        512,
+        768
+      ],
+      "anchor": [
+        256,
+        735
+      ],
+      "standing_height": 680,
+      "durations_ms": [
+        700
+      ]
+    },
+    "rest": {
+      "directory": "frames_v04/seated_idle",
+      "prefix": "seated_idle",
+      "canvas": [
+        512,
+        768
+      ],
+      "anchor": [
+        256,
+        735
+      ],
+      "standing_height": 680,
+      "durations_ms": [
+        600,
+        320,
+        100,
+        600
+      ]
+    },
+    "sit_down": {
+      "directory": "frames_v04/sit_down",
+      "prefix": "sit_down",
+      "canvas": [
+        512,
+        768
+      ],
+      "anchor": [
+        256,
+        735
+      ],
+      "standing_height": 680,
+      "durations_ms": [
+        180,
+        140,
+        160,
+        200,
+        240,
+        260
+      ]
+    },
+    "stand_up": {
+      "directory": "frames_v04/stand_up",
+      "prefix": "stand_up",
+      "canvas": [
+        512,
+        768
+      ],
+      "anchor": [
+        256,
+        735
+      ],
+      "standing_height": 680,
+      "durations_ms": [
+        260,
+        240,
+        200,
+        160,
+        140,
+        180
+      ]
+    }
+  }
+}

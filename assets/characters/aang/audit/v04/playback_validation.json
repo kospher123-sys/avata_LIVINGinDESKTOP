@@ -1,0 +1,151 @@
+{
+  "pass": true,
+  "mode": "real-time Qt offscreen, actual imported PNGs",
+  "records": [
+    {
+      "seconds": 0.0,
+      "action": "idle",
+      "frame": 1,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.016,
+      "action": "sit_down",
+      "frame": 1,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.203,
+      "action": "sit_down",
+      "frame": 2,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.359,
+      "action": "sit_down",
+      "frame": 3,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.516,
+      "action": "sit_down",
+      "frame": 4,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.703,
+      "action": "sit_down",
+      "frame": 5,
+      "x": 0.0
+    },
+    {
+      "seconds": 0.953,
+      "action": "sit_down",
+      "frame": 6,
+      "x": 0.0
+    },
+    {
+      "seconds": 1.219,
+      "action": "rest",
+      "frame": 1,
+      "x": 0.0
+    },
+    {
+      "seconds": 1.828,
+      "action": "rest",
+      "frame": 2,
+      "x": 0.0
+    },
+    {
+      "seconds": 2.125,
+      "action": "rest",
+      "frame": 3,
+      "x": 0.0
+    },
+    {
+      "seconds": 2.234,
+      "action": "rest",
+      "frame": 4,
+      "x": 0.0
+    },
+    {
+      "seconds": 2.828,
+      "action": "rest",
+      "frame": 1,
+      "x": 0.0
+    },
+    {
+      "seconds": 3.109,
+      "action": "stand_up",
+      "frame": 1,
+      "x": 0.0
+    },
+    {
+      "seconds": 3.375,
+      "action": "stand_up",
+      "frame": 2,
+      "x": 0.0
+    },
+    {
+      "seconds": 3.609,
+      "action": "stand_up",
+      "frame": 3,
+      "x": 0.0
+    },
+    {
+      "seconds": 3.828,
+      "action": "stand_up",
+      "frame": 4,
+      "x": 0.0
+    },
+    {
+      "seconds": 3.969,
+      "action": "stand_up",
+      "frame": 5,
+      "x": 0.0
+    },
+    {
+      "seconds": 4.109,
+      "action": "stand_up",
+      "frame": 6,
+      "x": 0.0
+    },
+    {
+      "seconds": 4.312,
+      "action": "walk",
+      "frame": 1,
+      "x": 1.2
+    },
+    {
+      "seconds": 4.437,
+      "action": "walk",
+      "frame": 2,
+      "x": 10.575
+    },
+    {
+      "seconds": 4.547,
+      "action": "walk",
+      "frame": 3,
+      "x": 19.95
+    },
+    {
+      "seconds": 4.672,
+      "action": "walk",
+      "frame": 4,
+      "x": 29.325
+    },
+    {
+      "seconds": 4.781,
+      "action": "walk",
+      "frame": 5,
+      "x": 37.5
+    },
+    {
+      "seconds": 4.922,
+      "action": "walk",
+      "frame": 6,
+      "x": 46.875
+    }
+  ],
+  "note": "Frame timing and state execution checked; visual naturalness remains a user review."
+}
