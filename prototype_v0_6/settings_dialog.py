@@ -1,7 +1,9 @@
 """Live preview with explicit save and rollback on cancel or window close."""
+from dataclasses import replace
 from PySide6.QtCore import Qt, QTime, QTimer
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox, QFormLayout,
-                               QHBoxLayout, QLabel, QSlider, QSpinBox, QTimeEdit, QVBoxLayout)
+                               QHBoxLayout, QLabel, QPushButton, QSlider, QSpinBox,
+                               QTabWidget, QTimeEdit, QVBoxLayout, QWidget)
 
 from settings import Preferences, automatic_height
 from screens import screen_key, screen_label
@@ -15,17 +17,28 @@ class SettingsDialog(QDialog):
         self._loading = False
         self.setWindowTitle("아앙 설정")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
-        self.setMinimumWidth(380)
+        self.setMinimumWidth(430)
         layout = QVBoxLayout(self)
         title = QLabel("아앙과 편하게 지내기")
         title.setStyleSheet("font-size: 18px; font-weight: 600; margin-bottom: 10px")
         layout.addWidget(title)
-        form = QFormLayout()
+        self.tabs = QTabWidget()
+        layout.addWidget(self.tabs)
+        forms = []
+        for name in ("화면·크기", "움직임", "생활 시간표"):
+            page = QWidget()
+            page_layout = QVBoxLayout(page)
+            form = QFormLayout()
+            page_layout.addLayout(form)
+            page_layout.addStretch()
+            self.tabs.addTab(page, name)
+            forms.append(form)
+        display_form, movement_form, routine_form = forms
         self.monitor = QComboBox()
         self.monitor.setMinimumContentsLength(28)
-        form.addRow("머물 화면", self.monitor)
+        display_form.addRow("머물 화면", self.monitor)
         self.auto_size = QCheckBox("화면 크기와 배율에 맞추기")
-        form.addRow("크기 조절", self.auto_size)
+        display_form.addRow("크기 조절", self.auto_size)
         row = QHBoxLayout()
         self.height_slider = QSlider(Qt.Orientation.Horizontal)
         self.height_slider.setRange(80, 240)
@@ -36,34 +49,56 @@ class SettingsDialog(QDialog):
         self.height.valueChanged.connect(self.height_slider.setValue)
         row.addWidget(self.height_slider)
         row.addWidget(self.height)
-        form.addRow("수동 높이", row)
+        display_form.addRow("수동 높이", row)
         self.size_hint = QLabel()
         self.size_hint.setWordWrap(True)
-        form.addRow(self.size_hint)
+        display_form.addRow(self.size_hint)
         self.speed = QSpinBox()
         self.speed.setRange(10, 150)
         self.speed.setSuffix(" px/초")
-        form.addRow("이동 속도", self.speed)
+        movement_form.addRow("이동 속도", self.speed)
         self.auto_move = QCheckBox("스스로 걷고 쉬기")
-        form.addRow("자동 이동", self.auto_move)
+        movement_form.addRow("자동 이동", self.auto_move)
+        movement_hint = QLabel("자동 이동을 끄면 대기합니다.\n휴식 시간에는 생활 시간표에 따라 대기합니다.")
+        movement_hint.setWordWrap(True)
+        movement_form.addRow(movement_hint)
         self.routine_enabled = QCheckBox("생활 시간표 사용")
-        form.addRow("생활 패턴", self.routine_enabled)
+        routine_form.addRow("생활 패턴", self.routine_enabled)
         self.rest_start = QTimeEdit()
         self.rest_end = QTimeEdit()
         for editor in (self.rest_start, self.rest_end):
             editor.setDisplayFormat("HH:mm")
-        form.addRow("휴식 시작", self.rest_start)
-        form.addRow("활동 재개", self.rest_end)
+        self.rest_start_now = QPushButton("현재시간")
+        self.rest_end_now = QPushButton("현재시간")
+        for label, editor, button in (("휴식 시작", self.rest_start, self.rest_start_now),
+                                      ("활동 재개", self.rest_end, self.rest_end_now)):
+            time_row = QHBoxLayout()
+            time_row.addWidget(editor, 1)
+            time_row.addWidget(button)
+            button.setAutoDefault(False)
+            button.setToolTip("컴퓨터의 현재 시각으로 설정")
+            button.clicked.connect(lambda checked=False, target=editor: target.setTime(QTime.currentTime()))
+            routine_form.addRow(label, time_row)
         self.routine_hint = QLabel("휴식 중에는 대기합니다. 같은 시간으로 맞추면 항상 활동합니다.")
         self.routine_hint.setWordWrap(True)
-        form.addRow(self.routine_hint)
+        routine_form.addRow(self.routine_hint)
+        self.reset_routine_button = QPushButton("시간표 초기화")
+        self.reset_routine_button.setAutoDefault(False)
+        self.reset_routine_button.setToolTip("시간표 꺼짐 · 휴식 22:00~07:00으로 복원")
+        self.reset_routine_button.clicked.connect(self.reset_routine)
+        routine_form.addRow(self.reset_routine_button)
         self.status = QLabel()
-        form.addRow("지금 아앙은", self.status)
-        layout.addLayout(form)
+        status_form = QFormLayout()
+        status_form.addRow("지금 아앙은", self.status)
+        layout.addLayout(status_form)
         hint = QLabel("변경하면 바로 미리보기에 반영됩니다.\n저장하면 다음 실행에도 유지되고, 취소하면 이전 설정으로 돌아갑니다.")
         hint.setWordWrap(True)
         layout.addWidget(hint)
         buttons = QDialogButtonBox()
+        self.reset_all_button = buttons.addButton("전체 설정 초기화", QDialogButtonBox.ButtonRole.ResetRole)
+        self.reset_all_button.setAutoDefault(False)
+        self.reset_all_button.setToolTip("모든 탭을 기본값으로 복원 · 저장 전 취소 가능")
+        self.reset_all_button.clicked.connect(self.reset_all)
         buttons.addButton("저장", QDialogButtonBox.ButtonRole.AcceptRole)
         buttons.addButton("취소", QDialogButtonBox.ButtonRole.RejectRole)
         buttons.accepted.connect(self.save)
@@ -84,9 +119,11 @@ class SettingsDialog(QDialog):
         self.reload()
 
     def reload(self):
-        self._loading = True
         self._original_mode = self.overlay.mode
-        prefs = self.overlay.preferences
+        self.set_values(self.overlay.preferences)
+
+    def set_values(self, prefs):
+        self._loading = True
         self.refresh_screens(preferred=prefs.monitor)
         self.height.setValue(prefs.height)
         self.speed.setValue(prefs.speed)
@@ -98,6 +135,16 @@ class SettingsDialog(QDialog):
         self.update_hint()
         self._loading = False
         self.update_status()
+
+    def reset_routine(self):
+        defaults = Preferences()
+        self.set_values(replace(self.values(), routine_enabled=defaults.routine_enabled,
+                               rest_start=defaults.rest_start, rest_end=defaults.rest_end))
+        self.preview()
+
+    def reset_all(self):
+        self.set_values(Preferences())
+        self.preview()
 
     def values(self):
         return Preferences(self.height.value(), self.auto_size.isChecked(),
@@ -133,6 +180,8 @@ class SettingsDialog(QDialog):
         enabled = self.routine_enabled.isChecked() and self.auto_move.isChecked()
         self.rest_start.setEnabled(enabled)
         self.rest_end.setEnabled(enabled)
+        self.rest_start_now.setEnabled(enabled)
+        self.rest_end_now.setEnabled(enabled)
         labels = {"stopped": "자동 이동 꺼짐 · 대기", "free": "자유롭게 걷고 쉬는 중",
                   "rest": "휴식 시간 · 대기", "active": "활동 시간 · 걷기와 대기"}
         if self.overlay.mode != "auto":

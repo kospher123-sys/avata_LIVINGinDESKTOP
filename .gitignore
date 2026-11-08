@@ -3,3 +3,8 @@ __pycache__/
 *.py[cod]
 .env
 .vscode/
+build/
+dist/
+reports/
+/assets/characters/aang/reference/meditation/
+/assets/characters/aang/previews/meditation_base_preview.png
