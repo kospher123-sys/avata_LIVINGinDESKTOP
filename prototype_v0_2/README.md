@@ -25,4 +25,4 @@ python prototype_v0_2/main.py
 - `overlay.py`: PySide6 display, timer, tray, procedural fallback art
 - `main.py`: application entry point
 
-Status: code uploaded; **not yet verified on the user's PC**. Multi-monitor and exclusive fullscreen behavior have not been tested.
+Status: **v0.2 locally verified by the user on 2026-11-08**: IDLE/WALK switching, edge turns, click-through and Always on Top. This documentation update did not rerun the app or change code. Multi-monitor and exclusive fullscreen behavior have not been tested.

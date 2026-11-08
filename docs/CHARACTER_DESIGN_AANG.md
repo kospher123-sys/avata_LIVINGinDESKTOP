@@ -2,17 +2,17 @@
 
 > 작성일: 2026-11-08  
 > 대상: 이미지 기반 애니메이션 준비(v0.3 후보)  
-> 상태: 디자인·제작 규격 수립 / 이미지 제작 및 앱 적용 전
+> 상태: 성인 마스터 확정·원본 저장 / IDLE 4장·WALK 6장 제작 예정 / 앱 적용 전
 
 ## 1. 문서의 역할
 
 프로젝트 목적, 오버레이 정책, 개발 단계와 실행 검증 현황은 [통합 기획서](../PROJECT_PLAN.md)를 따른다. 이 문서는 첫 캐릭터인 아앙의 **이미지 제작 기준·납품 목록·프롬프트**만 관리한다. 개발 구조와 진행 현황을 중복 기재하지 않는다.
 
-이번 반영 범위는 Markdown 문서뿐이다. 아래 에셋 경로는 향후 제작물 배치 계획이며, 이미지·메타데이터·코드의 생성 또는 업로드 완료를 뜻하지 않는다.
+이번 반영 범위는 문서와 확정 마스터 이미지다. 애니메이션 프레임·메타데이터·코드는 생성하거나 수정하지 않는다.
 
 ## 2. 비주얼 기준
 
-- 캐릭터: 아앙(Aang). 사용자가 선호하는 **최신 영화판 분위기**를 참고한다.
+- 캐릭터: 아앙을 모티브로 한 **20~24세 성인 남성 공기 승려**. 삭발, 성인 신체 비율, 주황·노랑 승려복과 버건디 허리띠, 오른쪽 90도 측면의 확정 마스터를 따른다. 여성 여행자 시안은 제외한다.
 - 영화풍의 성숙하고 세련된 인상과 색감을 살리되, 작은 데스크톱 캐릭터에 맞게 단순화한 **2D 스프라이트**로 제작한다.
 - 민머리와 파란 화살표 문양, 주황·노랑 계열 공기 유목민 승려 복장, 맑고 가벼운 표정과 실루엣을 유지한다.
 - 전신이 보이는 **오른쪽 옆모습**을 기본으로 한다. 과한 원근·카메라 회전·극적인 조명은 피한다.
@@ -20,13 +20,13 @@
 - 왼쪽 방향은 초기에는 오른쪽 프레임의 좌우 반전을 전제로 한다. 좌우 비대칭 의상·문양이 중요해지면 별도 방향 제작을 검토한다.
 - 초기 이미지에는 밴딩 효과, 소품, 배경 장식, 바닥 그림자를 넣지 않는다.
 
-**레퍼런스 확정:** 현재 특정 영화 제목·개봉 연도·의상 버전은 지정하지 않았다. “최신 영화판”은 사용자 선호를 나타내는 디자인 방향이며, 특정 작품의 공개·개봉 사실을 뜻하지 않는다. 제작 시작 시 사용자가 선택한 참고 이미지와 작품/버전을 기록하고, 승인된 마스터를 이후 모든 프레임의 기준으로 고정한다.
+**레퍼런스 확정(2026-11-08):** 최근 대화의 `image(9).png`를 직접 확인해 `assets/characters/aang/base_reference.png`로 원본 저장했다. 이후 모든 프레임은 이 마스터를 기준으로 고정한다. 특정 영화의 개봉 사실을 의미하지 않는다.
 
 ## 3. 필요한 이미지 — 총 11장
 
 | 구분 | 수량 | 파일명 | 역할 |
 | --- | ---: | --- | --- |
-| 마스터 레퍼런스 | 1 | `aang_master.png` | 외형·비율·색·시점의 기준. 런타임 애니메이션 프레임 수에서 제외 |
+| 마스터 레퍼런스 | 1 | `base_reference.png` | 외형·비율·색·시점의 기준. 런타임 애니메이션 프레임 수에서 제외 |
 | IDLE | 4 | `idle_01.png` ~ `idle_04.png` | 제자리 호흡 대기 루프 |
 | WALK | 6 | `walk_01.png` ~ `walk_06.png` | 오른쪽으로 걷는 동작 루프 |
 | 합계 | **11** | 마스터 1 + 애니메이션 10 | 왼쪽 반전본·미리보기·시트는 수량에 포함하지 않음 |
@@ -65,8 +65,7 @@
 assets/
 └── characters/
     └── aang/
-        ├── reference/
-        │   └── aang_master.png
+        ├── base_reference.png
         ├── idle/
         │   ├── idle_01.png
         │   ├── idle_02.png
@@ -86,7 +85,7 @@ assets/
 ## 5. 출력 규격과 일관성
 
 - **실제 알파 채널이 있는 투명 PNG(RGBA)**. 흰색·체커보드를 이미지에 그려 넣은 가짜 투명 배경은 불가.
-- 작업 규격 제안: 11장 모두 **512 × 512 px**, 동일 캔버스. 마스터 승인 전에 최종 확정한다.
+- 마스터 원본은 **1024 × 1536 px RGBA PNG**로 보존한다. 애니메이션 10장도 동일 캔버스를 기준으로 제작하고 크기·중심축·발 접지선을 맞춘다. 향후 앱용 축소본은 별도로 검수하며 원본을 덮어쓰지 않는다.
 - 모든 이미지의 캐릭터 크기, 수평 중심축, 발 접지선과 여백을 맞춘다. 걷기에 필요한 자연스러운 몸 높이 변화만 허용한다.
 - 머리·손·발·옷자락이 잘리지 않도록 충분한 여백을 확보한다. 프레임별 자동 잘라내기나 개별 크기 맞춤은 하지 않는다.
 - 얼굴, 머리 크기, 신체 비율, 화살표 위치·형태, 의상 구조, 색 팔레트, 선 두께, 명암과 광원을 마스터에 맞춘다.
@@ -97,8 +96,8 @@ assets/
 
 ## 6. 제작 순서와 검수
 
-1. 원하는 영화판 참고 이미지와 작품/버전을 선택하고 기록한다.
-2. 마스터 1장을 만든 뒤 외형·오른쪽 시점·캔버스·크기·접지선을 승인한다.
+1. 첨부 이미지 없이 텍스트로 성인 캐릭터 마스터를 생성한다.
+2. 마스터의 외형·오른쪽 시점·캔버스·크기·접지선을 검수해 확정한다. 현재 마스터는 확정·저장 완료다.
 3. 승인 마스터를 매번 첨부해 IDLE 01 → 04를 제작하고 호흡 루프를 확인한다.
 4. 동일 마스터와 승인된 이전 프레임을 참고해 WALK 01 → 06을 제작한다. 접지 자세 01·04를 먼저 맞춘 뒤 중간 자세를 보완해도 된다.
 5. 11장의 캔버스·정렬·알파 채널을 확인하고, 대기·걷기 루프와 왼쪽 반전 미리보기를 검수한다.
@@ -110,16 +109,16 @@ assets/
 
 ### A. 마스터 레퍼런스
 
-선택한 영화판 참고 이미지를 첨부해 사용한다. 처음에는 이 한 장만 생성하고, 승인된 결과를 후속 작업에 재사용한다.
+신규 캐릭터는 첨부 이미지 없이 텍스트로 마스터를 먼저 생성한다. 현재 캐릭터는 마스터가 확정되어 재생성하지 않으며, 승인 원본을 후속 애니메이션에 사용한다.
 
 ```text
-Create one master reference image of Aang for a desktop companion app.
-Use the attached user-selected movie reference for the overall mood and costume cues.
+Create one master reference image of an original young adult male air monk, age 20–24, for a desktop companion app.
+Use a completely shaved head, natural athletic adult proportions, a calm friendly expression, and orange, golden-yellow and muted burgundy monk robes. No hair, backpack, jewelry or elaborate traveler accessories.
 Translate it into a clean, simplified 2D animation sprite with a mature, polished cinematic feeling and a clear silhouette readable at small size.
 Full body, strict right-facing side view, relaxed neutral standing pose.
 Bald head with the recognizable blue arrow tattoo, orange and yellow Air Nomad monk clothing, calm and lighthearted expression.
 Consistent animation-ready proportions, clean outlines, restrained cel shading, fixed soft lighting, no dramatic perspective.
-One character only, centered horizontally on a 512 x 512 canvas, generous margins, both feet on a clearly consistent baseline.
+One character only, centered horizontally on a 1024 x 1536 canvas, generous margins, both feet on a clearly consistent baseline.
 Export as a transparent RGBA PNG with a real alpha channel.
 No background, floor shadow, effects, props, text, labels, watermark, checkerboard pattern, cropped limbs, or motion blur.
 ```
@@ -131,10 +130,10 @@ No background, floor shadow, effects, props, text, labels, watermark, checkerboa
 매 요청에 승인 마스터를 첨부하고, 아래 공통문과 C 또는 D의 **해당 프레임 동작 한 줄**을 함께 사용한다.
 
 ```text
-Use the attached approved aang_master.png as the fixed character reference.
+Use the attached approved base_reference.png as the fixed character reference.
 Create exactly ONE animation frame, not a sprite sheet or a collage.
 Keep the same face, head size, body proportions, arrow tattoo, outfit construction, palette, outline thickness, shading, lighting, and strict right-facing side-view camera.
-Use the same 512 x 512 canvas, character scale, horizontal center, ground baseline, and margins as the master.
+Use the same 1024 x 1536 canvas, character scale, horizontal center, ground baseline, and margins as the master.
 Keep the character in place; do not translate it horizontally across the canvas.
 Allow only the small body motion required by the specified animation phase.
 Full body visible, no cropped limbs. Transparent RGBA PNG with real alpha.
