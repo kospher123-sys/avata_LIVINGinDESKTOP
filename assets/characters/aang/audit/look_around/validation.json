@@ -1,0 +1,99 @@
+{
+  "source_sha256": "d92f8a34f274810e63c9756592f4bb41f07f9df38a0fa3fc6b4954c2a8437c03",
+  "source_unchanged": true,
+  "alpha_cutoff": 80,
+  "resized_or_redrawn": false,
+  "shared_standing_height": 1036,
+  "reference_sole_center": 249.5,
+  "frames": [
+    {
+      "frame": "look_around_01.png",
+      "source_cell": [
+        0,
+        0,
+        362,
+        1086
+      ],
+      "removed_low_alpha_pixels": 18373,
+      "retained_rgba_unchanged": true,
+      "bbox": [
+        88,
+        39,
+        323,
+        1075
+      ],
+      "anchor": [
+        207.4029411764706,
+        1074
+      ],
+      "sha256": "278cf20a9d8e277f839c35fba48de653f313944b387a3d5211e98f09027f559d"
+    },
+    {
+      "frame": "look_around_02.png",
+      "source_cell": [
+        362,
+        0,
+        362,
+        1086
+      ],
+      "removed_low_alpha_pixels": 17542,
+      "retained_rgba_unchanged": true,
+      "bbox": [
+        76,
+        35,
+        312,
+        1075
+      ],
+      "anchor": [
+        192.9029411764706,
+        1074
+      ],
+      "sha256": "25fc8e18ee4174ca60e7b22f3f2c5407cfc90b8c79ff25853579fb5de5c4748b"
+    },
+    {
+      "frame": "look_around_03.png",
+      "source_cell": [
+        724,
+        0,
+        362,
+        1086
+      ],
+      "removed_low_alpha_pixels": 16957,
+      "retained_rgba_unchanged": true,
+      "bbox": [
+        63,
+        40,
+        296,
+        1075
+      ],
+      "anchor": [
+        182.4029411764706,
+        1074
+      ],
+      "sha256": "b5e6b19534b9adc04f7c814f5a3f60b0e97a23dad1eaa367b5391b873e9df523"
+    },
+    {
+      "frame": "look_around_04.png",
+      "source_cell": [
+        1086,
+        0,
+        362,
+        1086
+      ],
+      "removed_low_alpha_pixels": 14532,
+      "retained_rgba_unchanged": true,
+      "bbox": [
+        51,
+        39,
+        283,
+        1075
+      ],
+      "anchor": [
+        167.4029411764706,
+        1074
+      ],
+      "sha256": "ee959468af05b960c497db9e9e4f0458e39ca9ddfa0259d56698b9dd432c7b6f"
+    }
+  ],
+  "limit": "Low-alpha edge removal is heuristic; no new poses or body redesign."
+}

@@ -2,14 +2,14 @@
 
 Windows 바탕화면 위에서 아앙이 걷고 쉬는 PySide6 데스크톱 아바타입니다.
 
-## 최신 실행 버전: v0.10
+## 최신 실행 버전: v0.12
 
 Python 3.11 환경에서 저장소 루트의 PowerShell로 실행합니다.
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r prototype_v0_10\requirements.txt
-.\.venv\Scripts\python.exe prototype_v0_10\main.py --settings
+.\.venv\Scripts\python.exe -m pip install -r prototype_v0_12\requirements.txt
+.\.venv\Scripts\python.exe prototype_v0_12\main.py --settings
 ```
 
 이미 가상환경과 PySide6가 설치되어 있으면 마지막 실행 명령만 사용합니다.
@@ -19,7 +19,7 @@ python -m venv .venv
 - 모니터 선택 및 자동 크기, 드래그 모드와 트레이 종료
 - 선택적으로 켜는 생활 시간표: 기본 22:00~07:00 휴식(대기)
 
-[v0.10 사용법·실행 파일 제작](prototype_v0_10/README.md) · [v0.9 검증 기록](docs/V09_VALIDATION.md) · [휴식 이미지 배치 규격](docs/REST_ASSET_IMPORT.md) · [통합 기획서](PROJECT_PLAN.md)
+[v0.12 사용법·실행 파일 제작](prototype_v0_12/README.md) · [범용 이미지 제작·검수 프롬프트](docs/SPRITE_PRODUCTION_REVIEW_PROMPT.md) · [휴식 이미지 배치 규격](docs/REST_ASSET_IMPORT.md) · [통합 기획서](PROJECT_PLAN.md)
 
 v0.3 움직임/이미지 및 v0.4 실시간 설정은 사용자 확인을 마쳤습니다. v0.5 다중 모니터는 모의 검사만 수행했고, 실기기 검사는 사용자 요청으로 보류했습니다. v0.6 시간표는 자동 검사를 통과했으며 사용자 검수는 남아 있습니다.
 
@@ -32,3 +32,7 @@ v0.8은 중복 실행 방지와 트레이 일시정지/재개·숨기기/다시 
 v0.9는 절전/화면 복구 처리, 용량 제한 로그, Windows 실행 파일 제작 및 자원 반복 검사 도구를 제공합니다. 로컬 배포 결과는 `dist/AangOverlay-v0.9/`이며 폴더 전체가 필요합니다. 실행 파일과 빌드 중간 파일, 검사 보고서는 Git에서 제외합니다.
 
 v0.10은 사용자 제공 512×768 이미지의 측면 대기·앉기·앉은 대기·일어서기를 연결합니다. 기존 걷기는 유지하며 새로운 크기/바닥 기준점과 프레임별 시간을 clips.json에서 읽습니다. `--preview-rest` 또는 트레이의 휴식 모션 확인으로 시험할 수 있습니다.
+
+v0.11은 동작 확인 탭에서 앉기→앉은 대기 한 바퀴→일어서기를 한 번 재생할 수 있습니다. 시간표/설정을 저장하지 않으며 종료 후 이전 동작 모드로 복귀합니다.
+
+v0.12는 대기 중 가끔 둘러보기를 재생합니다. 사용자 승인 후 원본 시트의 저알파 잔점을 제거하고, 남긴 RGBA를 보존한 네 프레임을 연결했습니다. extra_clips.json의 프레임별 발 기준점으로 흔들림을 줄이며, 동작 확인 탭에서 수동 재생할 수 있습니다.
