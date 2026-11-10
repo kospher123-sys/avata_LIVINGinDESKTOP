@@ -1,6 +1,6 @@
 # Avatar Living in Desktop — 통합 기획서
 
-> 최종 갱신: 2026-11-09
+> 최종 갱신: 2026-11-10
 > 기준 버전: v0.12 코드·이미지·프롬프트 GitHub 반영 확인 / 자동 검사 46개 및 실제 시간 재생 재검증 통과
 > 저장소: https://github.com/kospher123-sys/avata_LIVINGinDESKTOP
 
@@ -433,3 +433,13 @@ Windows 데스크톱 화면에 2D 아바타가 자연스럽게 머물고 생활�
 - PASS — 512×768 RGBA, 앵커 (256,735), 서기 기준 높이 680, 발 최하단 y=734, 합성 픽셀 일치 및 PySide6 v0.12 합성 PNG 6장 로딩.
 - WARNING — 밝은 배경에서 바람이 희미하다. 손·의상과 원본 바람이 맞닿은 픽셀의 원래 색과 알파는 확인할 수 없다. 시작/종료 자세와 기존 IDLE 사이에 실루엣 차이가 있다.
 - FAIL — v0.12에 AIR_IDLE_TRICK 행동이 등록되어 있지 않다. 1회 재생, 수평 이동 0, IDLE 복귀는 통합 사양이며 실제 앱 재생은 미검증이다.
+
+
+## ComfyUI / Wan Animate 제작 환경 조사 — 2026-11-10
+
+- Windows 데스크톱 GPU는 **Intel(R) Iris(R) Xe Graphics**. ComfyUI Desktop 최초 기동이 CUDA 장치 기대 및 Intel XPU 미감지로 실패했다(첨부 로그의 `Torch not compiled with CUDA enabled`, `XPU device count is zero!`, access violation).
+- 사용자가 PowerShell에서 `--cpu --disable-xformers` 옵션으로 ComfyUI 서버를 실행하고 `http://127.0.0.1:8188` 브라우저 접속에 성공한 것으로 보고했다. **CPU 모드 서버 접속 성공만 확인**; Desktop 자체 복구·이미지 생성·Wan Animate 가동은 아직 미검증이다.
+- Iris Xe CPU 환경에서 Wan2.2 Animate 14B 로컬 생성은 현실성이 낮아, **클라우드 GPU의 ComfyUI에서 짧은 동작을 시험 제작하는 방안**을 후보로 검토한다. 비용·서비스 정책·실제 품질은 미확정이다.
+- 2026-11-10의 기존 제작 방침(큰 실루엣 변화는 GPT 이미지 생성, 작은 호흡 등은 Synfig)을 유지한다. Wan Animate는 공격/공기 제어 같은 복잡 동작의 추가 실험 후보이며 대체 결정이 아니다.
+- 실행/재시작 명령, 선택적 BAT 런처, 모델/워크플로 준비, PNG 프레임 추출, 저작권 및 검수 체크리스트는 [ComfyUI + Wan Animate 가이드](docs/COMFYUI_WAN_ANIMATION_GUIDE.md)에 기록했다.
+- **GitHub 변경은 문서 2개만**. 프로그램 v0.12, 캐릭터 원본·PNG·로컬 코드 및 설정은 수정하지 않았다. 다음 단계: CPU 서버 안정적 재시작 → 클라우드에서 짧은 Wan 동작 1개 시험 → 외형·프레임·비용 검수 → 적용 여부 결정.
