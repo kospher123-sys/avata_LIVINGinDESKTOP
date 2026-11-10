@@ -52,8 +52,12 @@ class SettingsDialog(QDialog):
         preview_form.addRow(self.look_preview)
         self.air_preview = QPushButton("공기 벤딩 한 번 보기")
         self.air_preview.setAutoDefault(False)
-        self.air_preview.clicked.connect(self.overlay.preview_air_trick)
+        self.air_preview.clicked.connect(lambda: self.overlay.preview_air_trick())
         preview_form.addRow(self.air_preview)
+        self.air_sequence_preview = QPushButton("공기 소용돌이 한 번 보기")
+        self.air_sequence_preview.setAutoDefault(False)
+        self.air_sequence_preview.clicked.connect(self.overlay.preview_air_sequence)
+        preview_form.addRow(self.air_sequence_preview)
         self.preview_hint = QLabel()
         self.preview_hint.setWordWrap(True)
         preview_form.addRow(self.preview_hint)
@@ -213,6 +217,7 @@ class SettingsDialog(QDialog):
         self.play_preview.setEnabled(can_play and not previewing)
         self.stop_preview.setEnabled(previewing or self.overlay.air_trick.playing)
         self.air_preview.setEnabled(self.overlay.can_preview_air_trick())
+        self.air_sequence_preview.setEnabled(self.overlay.can_preview_air_trick(Action.AIR_TRICK))
         self.look_preview.setEnabled(animation.has_clip(Action.LOOK_AROUND) and not previewing
                                      and not self.overlay.idle_look.playing and not self.overlay.air_trick.playing
                                      and not self.overlay.paused

@@ -19,7 +19,7 @@ VISIBLE_HEIGHT = 396
 DURATIONS = {Action.IDLE: 0.320, Action.WALK: 0.120, Action.REST: 0.500,
              Action.SIT_DOWN: 0.150, Action.STAND_UP: 0.150}
 DURATIONS[Action.LOOK_AROUND] = 0.400
-TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_IDLE_TRICK)
+TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_IDLE_TRICK, Action.AIR_TRICK)
 
 
 class SpriteAnimation:
@@ -106,9 +106,13 @@ class SpriteAnimation:
                         raise ValueError("잘못된 프레임별 기준점")
                     rects.append(QRectF(ANCHOR[0] - point[0] * ratio, ANCHOR[1] - point[1] * ratio,
                                         canvas[0] * ratio, canvas[1] * ratio))
-                self.frames[action] = frames
-                self.frame_times[action] = [n / 1000 for n in times]
-                self.render_rects[action] = rects
+                order = spec.get("frame_order", list(range(1, len(frames) + 1)))
+                if (not isinstance(order, list) or not 1 <= len(order) <= 128
+                        or any(type(n) is not int or not 1 <= n <= len(frames) for n in order)):
+                    raise ValueError("잘못된 프레임 재생 순서")
+                self.frames[action] = [frames[n - 1] for n in order]
+                self.frame_times[action] = [times[n - 1] / 1000 for n in order]
+                self.render_rects[action] = [rects[n - 1] for n in order]
             except (OSError, ValueError, TypeError, KeyError) as error:
                 self.warnings.append(f"{name}: {error}")
 

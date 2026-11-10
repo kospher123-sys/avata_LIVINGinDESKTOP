@@ -35,6 +35,7 @@ class AvatarOverlay(QWidget):
         self.motion_preview = MotionPreview()
         self.idle_look = IdleLook()
         self.air_trick = IdleLook()
+        self._air_action = Action.AIR_IDLE_TRICK
         self._look_once = False
         self.avatar = Avatar()
         self.mode = "auto"
@@ -197,22 +198,26 @@ class AvatarOverlay(QWidget):
         self._refresh_preview_status()
         return True
 
-    def can_preview_air_trick(self):
+    def can_preview_air_trick(self, action=Action.AIR_IDLE_TRICK):
         return (not self.paused and not self.user_hidden and self.display_screen is not None
                 and self.mode in ("auto", "idle") and self.drag_offset is None
                 and not self.motion_preview.active and self.rest_controller.phase is None
                 and not self.idle_look.playing and not self.air_trick.playing
-                and self.animation.has_clip(Action.AIR_IDLE_TRICK))
+                and self.animation.has_clip(action))
 
-    def preview_air_trick(self):
-        if not self.can_preview_air_trick():
+    def preview_air_trick(self, action=Action.AIR_IDLE_TRICK):
+        if not self.can_preview_air_trick(action):
             return False
         self.avatar.action = Action.IDLE
         self.avatar.remaining = max(1.0, self.avatar.remaining)
         self.animation.advance(Action.IDLE, 0)
-        self.air_trick.start(self.animation.clip_duration(Action.AIR_IDLE_TRICK))
+        self._air_action = action
+        self.air_trick.start(self.animation.clip_duration(action))
         self._refresh_preview_status()
         return True
+
+    def preview_air_sequence(self):
+        return self.preview_air_trick(Action.AIR_TRICK)
 
     def _cancel_air_trick(self):
         if self.air_trick.playing:
@@ -364,8 +369,10 @@ class AvatarOverlay(QWidget):
         self.menu.addAction("이미지 다시 불러오기", self.reload_assets)
         self.menu.addAction("휴식 동작 한 번 보기", self.start_motion_preview)
         self.menu.addAction("둘러보기 한 번 보기", self.preview_look)
-        air_preview = self.menu.addAction("공기 벤딩 한 번 보기", self.preview_air_trick)
+        air_preview = self.menu.addAction("공기 벤딩 한 번 보기", lambda: self.preview_air_trick())
         self.menu.aboutToShow.connect(lambda: air_preview.setEnabled(self.can_preview_air_trick()))
+        sequence_preview = self.menu.addAction("공기 소용돌이 한 번 보기", self.preview_air_sequence)
+        self.menu.aboutToShow.connect(lambda: sequence_preview.setEnabled(self.can_preview_air_trick(Action.AIR_TRICK)))
         self.pause_action = self.menu.addAction("일시정지")
         self.pause_action.setCheckable(True)
         self.pause_action.triggered.connect(self.set_paused)
@@ -462,7 +469,8 @@ class AvatarOverlay(QWidget):
                     self._look_once = False
             air_eligible = (motion is None and not previewing and not looking
                             and self.mode in ("auto", "idle") and self.avatar.action == Action.IDLE)
-            air_action = Action.AIR_IDLE_TRICK
+            air_action = self._air_action if was_trick else Action.AIR_IDLE_TRICK
+            self._air_action = air_action
             # On a manual start the sprite has not displayed its first frame yet.
             air_dt = 0.0 if was_trick and self.animation.action != air_action else dt
             trick = self.air_trick.update(air_dt, air_eligible, self.animation.has_clip(air_action),
@@ -483,7 +491,7 @@ class AvatarOverlay(QWidget):
         elif looking:
             action = Action.LOOK_AROUND
         elif trick:
-            action = Action.AIR_IDLE_TRICK
+            action = self._air_action
         if was_trick != trick:
             self._refresh_preview_status()
         self.animation.advance(action, dt)

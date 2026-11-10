@@ -24,7 +24,7 @@ def main():
     app = QApplication([sys.argv[0], "-platform", "offscreen"] if args.check_package else sys.argv)
     if args.check_package:
         animation = SpriteAnimation()
-        return 0 if animation.has_clip(Action.AIR_IDLE_TRICK) and not animation.warnings else 1
+        return 0 if all(animation.has_clip(action) for action in (Action.AIR_IDLE_TRICK, Action.AIR_TRICK)) and not animation.warnings else 1
     app.setFont(QFont("Malgun Gothic", 10))
     app.setOrganizationName("AvatarLivingInDesktop")
     app.setApplicationName("AangOverlay")

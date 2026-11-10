@@ -12,6 +12,7 @@ class Action(str, Enum):
     STAND_UP = "stand_up"
     LOOK_AROUND = "look_around"
     AIR_IDLE_TRICK = "air_idle_trick"
+    AIR_TRICK = "air_trick"
 
 
 @dataclass

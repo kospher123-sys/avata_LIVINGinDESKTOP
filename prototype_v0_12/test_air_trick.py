@@ -75,3 +75,28 @@ class AirTrickTests(unittest.TestCase):
         animation.advance(Action.AIR_IDLE_TRICK, 0)
         self.assertEqual(animation.action, Action.IDLE)
         self.assertTrue(animation.has_clip(Action.WALK))
+    @patch("overlay.routine_state", return_value="active")
+    def test_air_sequence_repeats_hold_then_returns_to_idle(self, _):
+        window = self.window()
+        window.set_mode("idle")
+        window.set_display_height(120)
+        window.open_settings()
+        window.settings_dialog.air_sequence_preview.click()
+        self.tick(window)
+        action = Action.AIR_TRICK
+        self.assertEqual(window.animation.action, action)
+        self.assertAlmostEqual(window.animation.clip_duration(action), 6.7)
+        sequence = window.animation.frames[action]
+        self.assertEqual(len(sequence), 38)
+        for cycle in range(1, 5):
+            start = 4 + cycle * 6
+            self.assertEqual(sequence[start:start + 6], sequence[4:10])
+        seen = set()
+        position = window.pos()
+        for _ in range(336):
+            if window.animation.action == action:
+                seen.add(window.animation.index)
+            self.tick(window, .02)
+        self.assertEqual(seen, set(range(38)))
+        self.assertEqual(window.animation.action, Action.IDLE)
+        self.assertEqual(window.pos(), position)
