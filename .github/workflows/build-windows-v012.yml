@@ -1,0 +1,58 @@
+name: Build Windows v0.12
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build dependencies
+        run: python -m pip install -r prototype_v0_12/requirements.txt PyInstaller
+
+      - name: Run v0.12 tests
+        run: python -m unittest discover -s prototype_v0_12 -v
+
+      - name: Build onedir release
+        run: python prototype_v0_12/build_windows.py
+
+      - name: Verify and ZIP the release folder
+        shell: pwsh
+        run: |
+          $release = 'dist/AangOverlay-v0.12'
+          $required = @(
+            'AangOverlay-v0.12.exe'
+            '_internal'
+            'assets/characters/aang/clips.json'
+            'assets/characters/aang/extra_clips.json'
+          )
+          foreach ($path in $required) {
+            if (-not (Test-Path -LiteralPath (Join-Path $release $path))) {
+              throw "Missing release entry: $path"
+            }
+          }
+          python -m zipfile -c dist/AangOverlay-v0.12-windows.zip $release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m zipfile -t dist/AangOverlay-v0.12-windows.zip
+
+      - name: Upload Windows release
+        uses: actions/upload-artifact@v4
+        with:
+          name: AangOverlay-v0.12-windows
+          path: dist/AangOverlay-v0.12-windows.zip
+          if-no-files-found: error
+          compression-level: 0
