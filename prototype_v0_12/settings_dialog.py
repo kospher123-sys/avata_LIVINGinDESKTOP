@@ -50,6 +50,10 @@ class SettingsDialog(QDialog):
         self.look_preview.setAutoDefault(False)
         self.look_preview.clicked.connect(self.overlay.preview_look)
         preview_form.addRow(self.look_preview)
+        self.air_preview = QPushButton("공기 벤딩 한 번 보기")
+        self.air_preview.setAutoDefault(False)
+        self.air_preview.clicked.connect(self.overlay.preview_air_trick)
+        preview_form.addRow(self.air_preview)
         self.preview_hint = QLabel()
         self.preview_hint.setWordWrap(True)
         preview_form.addRow(self.preview_hint)
@@ -207,9 +211,11 @@ class SettingsDialog(QDialog):
         can_play = (animation.has_clip(Action.REST) and not self.overlay.paused
                     and not self.overlay.user_hidden and self.overlay.display_screen is not None)
         self.play_preview.setEnabled(can_play and not previewing)
-        self.stop_preview.setEnabled(previewing)
+        self.stop_preview.setEnabled(previewing or self.overlay.air_trick.playing)
+        self.air_preview.setEnabled(self.overlay.can_preview_air_trick())
         self.look_preview.setEnabled(animation.has_clip(Action.LOOK_AROUND) and not previewing
-                                     and not self.overlay.idle_look.playing and not self.overlay.paused
+                                     and not self.overlay.idle_look.playing and not self.overlay.air_trick.playing
+                                     and not self.overlay.paused
                                      and not self.overlay.user_hidden and self.overlay.display_screen is not None
                                      and self.overlay.rest_controller.phase is None)
         self.preview_hint.setText("완료하면 이전 동작 모드로 돌아갑니다. 휴식 시간이면 다시 앉아서 쉽니다."

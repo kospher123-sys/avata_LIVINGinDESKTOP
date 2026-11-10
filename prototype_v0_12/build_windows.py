@@ -33,13 +33,16 @@ def main():
             continue
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         for spec in manifest["clips"].values():
-            folder = (assets / spec["directory"]).resolve()
-            if not folder.is_relative_to(assets.resolve()):
-                raise ValueError("Unsafe asset directory")
-            target = output / "assets/characters/aang" / folder.relative_to(assets.resolve())
-            target.mkdir(parents=True, exist_ok=True)
-            for frame in folder.glob("*.png"):
-                shutil.copy2(frame, target / frame.name)
+            for key in ("directory", "effect_directory"):
+                if key not in spec:
+                    continue
+                folder = (assets / spec[key]).resolve()
+                if not folder.is_relative_to(assets.resolve()):
+                    raise ValueError("Unsafe asset directory")
+                target = output / "assets/characters/aang" / folder.relative_to(assets.resolve())
+                target.mkdir(parents=True, exist_ok=True)
+                for frame in folder.glob("*.png"):
+                    shutil.copy2(frame, target / frame.name)
         shutil.copy2(manifest_path, output / "assets/characters/aang" / manifest_name)
     shutil.copy2(source / "README.md", output / "README.md")
     shutil.copy2(root / "docs/REST_ASSET_IMPORT.md", output / "REST_ASSET_IMPORT.md")

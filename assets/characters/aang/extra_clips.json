@@ -37,6 +37,28 @@
         500,
         320
       ]
+    },
+    "air_idle_trick": {
+      "directory": "air_idle_trick/character",
+      "prefix": "air_idle_trick",
+      "canvas": [
+        512,
+        768
+      ],
+      "anchor": [
+        256,
+        735
+      ],
+      "standing_height": 680,
+      "durations_ms": [
+        160,
+        150,
+        160,
+        220,
+        180,
+        170
+      ],
+      "effect_directory": "air_idle_trick/wind"
     }
   }
 }

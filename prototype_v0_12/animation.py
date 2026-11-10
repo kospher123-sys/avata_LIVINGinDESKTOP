@@ -5,7 +5,7 @@ import json
 import math
 
 from PySide6.QtCore import QRectF
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from avatar import Action
 from app_paths import asset_root
@@ -19,7 +19,7 @@ VISIBLE_HEIGHT = 396
 DURATIONS = {Action.IDLE: 0.320, Action.WALK: 0.120, Action.REST: 0.500,
              Action.SIT_DOWN: 0.150, Action.STAND_UP: 0.150}
 DURATIONS[Action.LOOK_AROUND] = 0.400
-TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND)
+TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_IDLE_TRICK)
 
 
 class SpriteAnimation:
@@ -35,7 +35,7 @@ class SpriteAnimation:
                 path = Path(root) / action.value / f"{action.value}_{index:02}.png"
                 frames.append(self._load_frame(path))
             self.frames[action] = frames
-        for action in (Action.REST, *TRANSITIONS):
+        for action in (Action.REST, Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND):
             paths = sorted((self.root / action.value).glob("*.png"))
             if not paths:
                 continue
@@ -88,6 +88,14 @@ class SpriteAnimation:
                 if not isinstance(times, list) or len(times) != len(paths) or any(type(n) not in (int, float) or not math.isfinite(n) or not 20 <= n <= 10000 for n in times):
                     raise ValueError("프레임 수와 재생 시간이 일치해야 합니다 (20~10000ms).")
                 frames = [self._load_frame(p, canvas) for p in paths]
+                if action == Action.AIR_IDLE_TRICK:
+                    effects = (self.root / spec["effect_directory"]).resolve()
+                    if not effects.is_relative_to(self.root.resolve()):
+                        raise ValueError("효과 폴더는 캐릭터 폴더 내부여야 합니다.")
+                    for path, sprite in zip(paths, frames):
+                        effect = self._load_frame(effects / path.name, canvas, allow_empty=True)
+                        with QPainter(sprite) as painter:
+                            painter.drawPixmap(0, 0, effect)
                 ratio = VISIBLE_HEIGHT / height
                 anchors = spec.get("anchors", [anchor] * len(paths))
                 if not isinstance(anchors, list) or len(anchors) != len(paths):
@@ -105,14 +113,14 @@ class SpriteAnimation:
                 self.warnings.append(f"{name}: {error}")
 
     @staticmethod
-    def _load_frame(path, canvas=CANVAS):
+    def _load_frame(path, canvas=CANVAS, allow_empty=False):
         image = QImage(str(path))
         if image.isNull() or (image.width(), image.height()) != tuple(canvas) or not image.hasAlphaChannel():
             raise ValueError(f"투명 PNG {canvas[0]}×{canvas[1]} 규격을 확인하세요: {path}")
         # An alpha channel alone also exists in fully opaque or fully empty files.
         alpha = image.convertToFormat(QImage.Format.Format_RGBA8888)
         values = bytes(alpha.constBits())[3::4]
-        if min(values) == 255 or max(values) == 0:
+        if min(values) == 255 or (not allow_empty and max(values) == 0):
             raise ValueError(f"캐릭터와 투명 배경이 모두 필요합니다: {path}")
         return QPixmap.fromImage(image)
 
@@ -122,7 +130,7 @@ class SpriteAnimation:
     def clip_duration(self, action):
         if action in self.frame_times:
             return sum(self.frame_times[action])
-        return len(self.frames.get(action, [])) * DURATIONS[action]
+        return len(self.frames.get(action, [])) * DURATIONS.get(action, 0.0)
 
     def advance(self, action, dt):
         if action not in self.frames:

@@ -34,6 +34,7 @@ class AvatarOverlay(QWidget):
         self.rest_controller = self._make_rest_controller()
         self.motion_preview = MotionPreview()
         self.idle_look = IdleLook()
+        self.air_trick = IdleLook()
         self._look_once = False
         self.avatar = Avatar()
         self.mode = "auto"
@@ -179,6 +180,7 @@ class AvatarOverlay(QWidget):
         self.drag_offset = None
         self.rest_controller.reset()
         self.animation.advance(Action.IDLE, 0)
+        self._cancel_air_trick()
         self.motion_preview.start(self.animation.clip_duration(Action.REST))
         self._refresh_preview_status()
         logger.info("One-shot motion preview started")
@@ -187,7 +189,7 @@ class AvatarOverlay(QWidget):
     def preview_look(self):
         if (self.paused or self.user_hidden or self.display_screen is None
                 or self.motion_preview.active or self.rest_controller.phase is not None
-                or self.idle_look.playing or not self.animation.has_clip(Action.LOOK_AROUND)):
+                or self.idle_look.playing or self.air_trick.playing or not self.animation.has_clip(Action.LOOK_AROUND)):
             return False
         self._look_once = True
         self.drag_offset = None
@@ -195,7 +197,31 @@ class AvatarOverlay(QWidget):
         self._refresh_preview_status()
         return True
 
+    def can_preview_air_trick(self):
+        return (not self.paused and not self.user_hidden and self.display_screen is not None
+                and self.mode in ("auto", "idle") and self.drag_offset is None
+                and not self.motion_preview.active and self.rest_controller.phase is None
+                and not self.idle_look.playing and not self.air_trick.playing
+                and self.animation.has_clip(Action.AIR_IDLE_TRICK))
+
+    def preview_air_trick(self):
+        if not self.can_preview_air_trick():
+            return False
+        self.avatar.action = Action.IDLE
+        self.avatar.remaining = max(1.0, self.avatar.remaining)
+        self.animation.advance(Action.IDLE, 0)
+        self.air_trick.start(self.animation.clip_duration(Action.AIR_IDLE_TRICK))
+        self._refresh_preview_status()
+        return True
+
+    def _cancel_air_trick(self):
+        if self.air_trick.playing:
+            self.air_trick.cancel()
+            self.animation.advance(Action.IDLE, 0)
+            self.update()
+
     def stop_motion_preview(self):
+        self._cancel_air_trick()
         if self.motion_preview.active:
             self.motion_preview.cancel()
             logger.info("Motion preview stopped")
@@ -338,6 +364,8 @@ class AvatarOverlay(QWidget):
         self.menu.addAction("이미지 다시 불러오기", self.reload_assets)
         self.menu.addAction("휴식 동작 한 번 보기", self.start_motion_preview)
         self.menu.addAction("둘러보기 한 번 보기", self.preview_look)
+        air_preview = self.menu.addAction("공기 벤딩 한 번 보기", self.preview_air_trick)
+        self.menu.aboutToShow.connect(lambda: air_preview.setEnabled(self.can_preview_air_trick()))
         self.pause_action = self.menu.addAction("일시정지")
         self.pause_action.setCheckable(True)
         self.pause_action.triggered.connect(self.set_paused)
@@ -398,6 +426,8 @@ class AvatarOverlay(QWidget):
         self._last = now
         motion = None
         looking = False
+        trick = False
+        was_trick = self.air_trick.playing
         if self.drag_offset is None:
             state = routine_state(self.preview or self.preferences)
             previous_motion = self.rest_controller.phase
@@ -424,20 +454,38 @@ class AvatarOverlay(QWidget):
             if motion is not None or previewing:
                 self.idle_look.cancel()
                 self._look_once = False
-            else:
+            elif not was_trick:
                 eligible = self._look_once or (self.mode in ("auto", "idle") and self.avatar.action == Action.IDLE)
                 looking = self.idle_look.update(dt, eligible, self.animation.has_clip(Action.LOOK_AROUND),
                                                 self.animation.clip_duration(Action.LOOK_AROUND))
                 if not looking:
                     self._look_once = False
-            if motion is None and not previewing and not looking:
+            air_eligible = (motion is None and not previewing and not looking
+                            and self.mode in ("auto", "idle") and self.avatar.action == Action.IDLE)
+            air_action = Action.AIR_IDLE_TRICK
+            # On a manual start the sprite has not displayed its first frame yet.
+            air_dt = 0.0 if was_trick and self.animation.action != air_action else dt
+            trick = self.air_trick.update(air_dt, air_eligible, self.animation.has_clip(air_action),
+                                          self.animation.clip_duration(air_action))
+            if motion is None and not previewing and not looking and not trick and not was_trick:
                 self.avatar.update(dt, self.left, self.right)
             self.move(round(self.avatar.x), self.y())
         else:
             self.rest_controller.reset()
             self.idle_look.cancel()
             self._look_once = False
-        action = Action.IDLE if self.drag_offset is not None else (motion or (Action.LOOK_AROUND if looking else self.avatar.action))
+            self._cancel_air_trick()
+        action = self.avatar.action
+        if self.drag_offset is not None:
+            action = Action.IDLE
+        elif motion is not None:
+            action = motion
+        elif looking:
+            action = Action.LOOK_AROUND
+        elif trick:
+            action = Action.AIR_IDLE_TRICK
+        if was_trick != trick:
+            self._refresh_preview_status()
         self.animation.advance(action, dt)
         self.update()
 
@@ -456,6 +504,7 @@ class AvatarOverlay(QWidget):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self._cancel_air_trick()
             self.drag_offset = event.globalPosition().toPoint() - self.pos()
             event.accept()
 
