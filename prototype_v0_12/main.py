@@ -6,6 +6,8 @@ import sys
 from PySide6.QtCore import QTimer, qInstallMessageHandler
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMessageBox
+from animation import SpriteAnimation
+from avatar import Action
 from overlay import AvatarOverlay
 from single_instance import SingleInstance
 from diagnostics import configure_logging, install_error_handlers
@@ -17,8 +19,12 @@ def main():
     parser.add_argument("--preview-rest", action="store_true", help="저장된 시간표를 바꾸지 않고 휴식 모션 확인")
     parser.add_argument("--preview-once", action="store_true", help="휴식 동작 한 번 재생")
     parser.add_argument("--quit-after", type=float, default=0, help="실행 검사: 지정 초 뒤 종료")
+    parser.add_argument("--check-package", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
-    app = QApplication(sys.argv)
+    app = QApplication([sys.argv[0], "-platform", "offscreen"] if args.check_package else sys.argv)
+    if args.check_package:
+        animation = SpriteAnimation()
+        return 0 if animation.has_clip(Action.AIR_IDLE_TRICK) and not animation.warnings else 1
     app.setFont(QFont("Malgun Gothic", 10))
     app.setOrganizationName("AvatarLivingInDesktop")
     app.setApplicationName("AangOverlay")

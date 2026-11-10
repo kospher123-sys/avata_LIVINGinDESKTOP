@@ -1,6 +1,7 @@
 """Build a folder release, with editable sprites outside the executable."""
 from pathlib import Path
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -14,10 +15,15 @@ def main():
     output = root / "dist" / "AangOverlay-v0.12"
     work = root / "build" / "v0.12"
     work.mkdir(parents=True, exist_ok=True)
+    # Keep unrelated programs on PATH out of PyInstaller's DLL discovery.
+    env = os.environ.copy()
+    env["PATH"] = os.pathsep.join((str(Path(sys.executable).parent),
+                                  str(Path(os.environ["SystemRoot"]) / "System32")))
     subprocess.run([sys.executable, "-m", "PyInstaller", "--noconfirm", "--clean",
                     "--onedir", "--windowed", "--name", output.name,
                     "--distpath", str(output.parent), "--workpath", str(work / "cache"),
-                    "--specpath", str(work), str(source / "main.py")], check=True, cwd=source)
+                    "--specpath", str(work), str(source / "main.py")],
+                   check=True, cwd=source, env=env)
     # Copy only runtime frames, not reference artwork, audits or user settings.
     assets = root / "assets/characters/aang"
     for action in ("idle", "walk", "rest", "sit_down", "stand_up"):
@@ -46,7 +52,10 @@ def main():
         shutil.copy2(manifest_path, output / "assets/characters/aang" / manifest_name)
     shutil.copy2(source / "README.md", output / "README.md")
     shutil.copy2(root / "docs/REST_ASSET_IMPORT.md", output / "REST_ASSET_IMPORT.md")
-    print(output / f"{output.name}.exe")
+    executable = output / f"{output.name}.exe"
+    subprocess.run([str(executable), "--check-package"],
+                   check=True, timeout=30, cwd=output)
+    print(executable)
 
 
 if __name__ == "__main__":
