@@ -1,4 +1,4 @@
-"""AIR_IDLE_TRICK asset fallback and overlay playback regression tests."""
+"""Air clip asset fallback and overlay playback regression tests."""
 from pathlib import Path
 import shutil
 import unittest
@@ -19,33 +19,41 @@ class AirTrickTests(unittest.TestCase):
             window._tick()
 
     @patch("overlay.routine_state", return_value="active")
-    def test_preview_plays_all_frames_and_returns_to_idle(self, _):
+    def test_blast_plays_all_frames_and_restores_window(self, _):
         window = self.window()
         window.set_mode("idle")
         window.set_display_height(120)
         window.open_settings()
-        window.settings_dialog.air_preview.click()
+        position, width = window.pos(), window.width()
+        window.settings_dialog.air_blast_preview.click()
         self.tick(window)
-        self.assertEqual(window.animation.action, Action.AIR_IDLE_TRICK)
-        position = window.pos()
-        frames = []
-        for _ in range(53):
-            frames.append(window.animation.index)
+        self.assertEqual(window.animation.action, Action.AIR_BLAST)
+        self.assertGreater(window.width(), width)
+        self.assertEqual(window.x() + window._horizontal_padding, position.x())
+        self.assertEqual(window.y(), position.y())
+        frames = set()
+        for _ in range(137):
+            if window.animation.action == Action.AIR_BLAST:
+                frames.add(window.animation.index)
             self.tick(window, .02)
-        self.assertEqual(sorted(set(frames)), list(range(6)))
+        self.assertEqual(frames, set(range(24)))
         self.assertEqual(window.animation.action, Action.IDLE)
         self.assertEqual(window.pos(), position)
-        self.assertTrue(window.settings_dialog.air_preview.isEnabled())
+        self.assertEqual(window.width(), width)
+        self.assertTrue(window.settings_dialog.air_blast_preview.isEnabled())
 
     @patch("overlay.routine_state", return_value="active")
     def test_automatic_pause_mirror_and_interruption(self, routine):
         window = self.window()
         window.set_mode("idle")
         window.set_display_height(120)
+        window.set_mode("auto")
+        window.avatar.action = Action.IDLE
+        window.avatar.remaining = 4.0
         window.air_trick.cooldown = 0
         for _ in range(7):
             self.tick(window)
-        self.assertEqual(window.animation.action, Action.AIR_IDLE_TRICK)
+        self.assertEqual(window.animation.action, Action.AIR_TRICK)
         window.set_paused(True)
         elapsed = window.animation.elapsed
         self.tick(window)
@@ -63,25 +71,27 @@ class AirTrickTests(unittest.TestCase):
         self.assertFalse(window.air_trick.playing)
         self.assertIn(window.animation.action, (Action.SIT_DOWN, Action.REST))
 
-    def test_missing_effect_disables_only_air_trick(self):
+    def test_missing_blast_frame_disables_only_blast(self):
         root = Path(self.directory.name) / "aang"
-        for name in ("idle", "walk", "air_idle_trick"):
+        for name in ("idle", "walk", "frames_look_around", "air_trick", "air_blast"):
             shutil.copytree(ASSET_ROOT / name, root / name)
         shutil.copy2(ASSET_ROOT / "extra_clips.json", root)
-        (root / "air_idle_trick/wind/air_idle_trick_04.png").unlink()
+        (root / "air_blast/air_blast_04.png").unlink()
         animation = SpriteAnimation(root)
-        self.assertTrue(any("air_idle_trick" in warning for warning in animation.warnings))
-        self.assertFalse(animation.has_clip(Action.AIR_IDLE_TRICK))
-        animation.advance(Action.AIR_IDLE_TRICK, 0)
+        self.assertTrue(any("air_blast" in warning for warning in animation.warnings))
+        self.assertTrue(animation.has_clip(Action.AIR_TRICK))
+        self.assertFalse(animation.has_clip(Action.AIR_BLAST))
+        animation.advance(Action.AIR_BLAST, 0)
         self.assertEqual(animation.action, Action.IDLE)
         self.assertTrue(animation.has_clip(Action.WALK))
+
     @patch("overlay.routine_state", return_value="active")
     def test_air_sequence_repeats_hold_then_returns_to_idle(self, _):
         window = self.window()
         window.set_mode("idle")
         window.set_display_height(120)
         window.open_settings()
-        window.settings_dialog.air_sequence_preview.click()
+        window.settings_dialog.air_preview.click()
         self.tick(window)
         action = Action.AIR_TRICK
         self.assertEqual(window.animation.action, action)

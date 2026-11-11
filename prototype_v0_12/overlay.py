@@ -35,7 +35,8 @@ class AvatarOverlay(QWidget):
         self.motion_preview = MotionPreview()
         self.idle_look = IdleLook()
         self.air_trick = IdleLook()
-        self._air_action = Action.AIR_IDLE_TRICK
+        self._air_action = Action.AIR_TRICK
+        self._horizontal_padding = 0
         self._look_once = False
         self.avatar = Avatar()
         self.mode = "auto"
@@ -198,14 +199,14 @@ class AvatarOverlay(QWidget):
         self._refresh_preview_status()
         return True
 
-    def can_preview_air_trick(self, action=Action.AIR_IDLE_TRICK):
+    def can_preview_air_trick(self, action=Action.AIR_TRICK):
         return (not self.paused and not self.user_hidden and self.display_screen is not None
                 and self.mode in ("auto", "idle") and self.drag_offset is None
                 and not self.motion_preview.active and self.rest_controller.phase is None
                 and not self.idle_look.playing and not self.air_trick.playing
                 and self.animation.has_clip(action))
 
-    def preview_air_trick(self, action=Action.AIR_IDLE_TRICK):
+    def preview_air_trick(self, action=Action.AIR_TRICK):
         if not self.can_preview_air_trick(action):
             return False
         self.avatar.action = Action.IDLE
@@ -216,13 +217,14 @@ class AvatarOverlay(QWidget):
         self._refresh_preview_status()
         return True
 
-    def preview_air_sequence(self):
-        return self.preview_air_trick(Action.AIR_TRICK)
+    def preview_air_blast(self):
+        return self.preview_air_trick(Action.AIR_BLAST)
 
     def _cancel_air_trick(self):
         if self.air_trick.playing:
             self.air_trick.cancel()
             self.animation.advance(Action.IDLE, 0)
+            self._layout_sprite()
             self.update()
 
     def stop_motion_preview(self):
@@ -351,17 +353,30 @@ class AvatarOverlay(QWidget):
     def set_display_height(self, height):
         self.display_height = height
         self.scale = height / VISIBLE_HEIGHT
-        self.setFixedSize(math.ceil(CANVAS[0] * self.scale), math.ceil(CANVAS[1] * self.scale))
+        self._layout_sprite()
         self._refresh_bounds()
+
+    def _layout_sprite(self):
+        width = math.ceil(CANVAS[0] * self.scale)
+        height = math.ceil(CANVAS[1] * self.scale)
+        padding = 0
+        if self.animation.action == Action.AIR_BLAST:
+            rect = self.animation.render_rect
+            # Reserve room for the projectile on either side of the foot anchor.
+            padding = max(0, math.ceil(rect.right() * self.scale - width))
+        if self.width() != width + 2 * padding or self.height() != height:
+            self.setFixedSize(width + 2 * padding, height)
+        self._horizontal_padding = padding
+        self.move(round(self.avatar.x) - padding, self.y())
 
     def _refresh_bounds(self, *args):
         area = self.display_screen.availableGeometry()
         self.left = area.left()
-        self.right = max(self.left, area.right() + 1 - self.width())
+        self.right = max(self.left, area.right() + 1 - math.ceil(CANVAS[0] * self.scale))
         # Align the common foot anchor, rather than the transparent canvas bottom.
         self.floor = round(area.bottom() - ANCHOR[1] * self.scale)
         self.avatar.x = max(self.left, min(self.avatar.x, self.right))
-        self.move(round(self.avatar.x), self.floor)
+        self.move(round(self.avatar.x) - self._horizontal_padding, self.floor)
 
     def _setup_tray(self):
         self.menu = QMenu()
@@ -369,10 +384,10 @@ class AvatarOverlay(QWidget):
         self.menu.addAction("이미지 다시 불러오기", self.reload_assets)
         self.menu.addAction("휴식 동작 한 번 보기", self.start_motion_preview)
         self.menu.addAction("둘러보기 한 번 보기", self.preview_look)
-        air_preview = self.menu.addAction("공기 벤딩 한 번 보기", lambda: self.preview_air_trick())
+        air_preview = self.menu.addAction("공기 소용돌이 한 번 보기", lambda: self.preview_air_trick())
         self.menu.aboutToShow.connect(lambda: air_preview.setEnabled(self.can_preview_air_trick()))
-        sequence_preview = self.menu.addAction("공기 소용돌이 한 번 보기", self.preview_air_sequence)
-        self.menu.aboutToShow.connect(lambda: sequence_preview.setEnabled(self.can_preview_air_trick(Action.AIR_TRICK)))
+        blast_preview = self.menu.addAction("에어 블라스트 한 번 보기", self.preview_air_blast)
+        self.menu.aboutToShow.connect(lambda: blast_preview.setEnabled(self.can_preview_air_trick(Action.AIR_BLAST)))
         self.pause_action = self.menu.addAction("일시정지")
         self.pause_action.setCheckable(True)
         self.pause_action.triggered.connect(self.set_paused)
@@ -469,7 +484,7 @@ class AvatarOverlay(QWidget):
                     self._look_once = False
             air_eligible = (motion is None and not previewing and not looking
                             and self.mode in ("auto", "idle") and self.avatar.action == Action.IDLE)
-            air_action = self._air_action if was_trick else Action.AIR_IDLE_TRICK
+            air_action = self._air_action if was_trick else Action.AIR_TRICK
             self._air_action = air_action
             # On a manual start the sprite has not displayed its first frame yet.
             air_dt = 0.0 if was_trick and self.animation.action != air_action else dt
@@ -477,7 +492,6 @@ class AvatarOverlay(QWidget):
                                           self.animation.clip_duration(air_action))
             if motion is None and not previewing and not looking and not trick and not was_trick:
                 self.avatar.update(dt, self.left, self.right)
-            self.move(round(self.avatar.x), self.y())
         else:
             self.rest_controller.reset()
             self.idle_look.cancel()
@@ -495,11 +509,14 @@ class AvatarOverlay(QWidget):
         if was_trick != trick:
             self._refresh_preview_status()
         self.animation.advance(action, dt)
+        if self.drag_offset is None:
+            self._layout_sprite()
         self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.translate(self._horizontal_padding, 0)
         # Mirror around the exact common anchor, including fractional scaling.
         if self.avatar.direction < 0:
             painter.translate(2 * ANCHOR[0] * self.scale, 0)

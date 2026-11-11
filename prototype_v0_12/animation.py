@@ -19,7 +19,7 @@ VISIBLE_HEIGHT = 396
 DURATIONS = {Action.IDLE: 0.320, Action.WALK: 0.120, Action.REST: 0.500,
              Action.SIT_DOWN: 0.150, Action.STAND_UP: 0.150}
 DURATIONS[Action.LOOK_AROUND] = 0.400
-TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_IDLE_TRICK, Action.AIR_TRICK)
+TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_TRICK, Action.AIR_BLAST)
 
 
 class SpriteAnimation:
@@ -88,7 +88,7 @@ class SpriteAnimation:
                 if not isinstance(times, list) or len(times) != len(paths) or any(type(n) not in (int, float) or not math.isfinite(n) or not 20 <= n <= 10000 for n in times):
                     raise ValueError("프레임 수와 재생 시간이 일치해야 합니다 (20~10000ms).")
                 frames = [self._load_frame(p, canvas) for p in paths]
-                if action == Action.AIR_IDLE_TRICK:
+                if "effect_directory" in spec:
                     effects = (self.root / spec["effect_directory"]).resolve()
                     if not effects.is_relative_to(self.root.resolve()):
                         raise ValueError("효과 폴더는 캐릭터 폴더 내부여야 합니다.")
