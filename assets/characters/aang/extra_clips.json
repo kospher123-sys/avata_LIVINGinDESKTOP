@@ -108,17 +108,17 @@
       ]
     },
     "air_blast": {
-      "directory": "air_blast",
+      "directory": "air_blast_v11/character",
       "prefix": "air_blast",
       "canvas": [
-        1350,
-        352
+        576,
+        704
       ],
       "anchor": [
-        164,
-        325
+        288,
+        650
       ],
-      "standing_height": 303,
+      "standing_height": 606,
       "durations_ms": [
         200,
         120,
@@ -129,22 +129,11 @@
         150,
         90,
         110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        110,
-        100,
-        100,
-        100,
-        100
-      ]
+        120,
+        140,
+        630
+      ],
+      "blast_effects": "air_blast_v11/effects.json"
     }
   }
 }

@@ -49,6 +49,12 @@ def main():
                 target.mkdir(parents=True, exist_ok=True)
                 for frame in folder.glob("*.png"):
                     shutil.copy2(frame, target / frame.name)
+            if "blast_effects" in spec:
+                config = (assets / spec["blast_effects"]).resolve()
+                if not config.is_relative_to(assets.resolve()) or not config.is_file():
+                    raise ValueError("Unsafe or missing AIR_BLAST metadata")
+                target = output / "assets/characters/aang" / config.parent.relative_to(assets.resolve())
+                shutil.copytree(config.parent, target, dirs_exist_ok=True)
         shutil.copy2(manifest_path, output / "assets/characters/aang" / manifest_name)
     shutil.copy2(source / "README.md", output / "README.md")
     shutil.copy2(root / "docs/REST_ASSET_IMPORT.md", output / "REST_ASSET_IMPORT.md")

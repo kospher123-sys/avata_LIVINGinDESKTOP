@@ -1,0 +1,42 @@
+{
+  "backend": "windows",
+  "cycles_completed": 3,
+  "directions": [
+    1,
+    -1,
+    1
+  ],
+  "first_front_paint_by_direction": [
+    {
+      "elapsed": 0.766,
+      "character_frame": 7,
+      "direction": 1,
+      "edge": 2560.0
+    },
+    {
+      "elapsed": 0.765,
+      "character_frame": 7,
+      "direction": -1,
+      "edge": 0.0
+    }
+  ],
+  "native_effect_extended_style": "0x80800a8",
+  "effect_excluded_from_hit_test": true,
+  "device_pixel_ratio": 1.0,
+  "work_area": [
+    0,
+    0,
+    2560,
+    1392
+  ],
+  "paint_calls": 371,
+  "paint_ms_mean": 0.875,
+  "paint_ms_p95": 2.421,
+  "timer_gap_ms_median": 16.043,
+  "timer_gap_ms_p95": 17.206,
+  "working_set_after_cycles": [
+    128585728,
+    128622592,
+    128651264
+  ]
+}

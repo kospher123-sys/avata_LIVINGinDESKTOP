@@ -9,6 +9,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from avatar import Action
 from app_paths import asset_root
+from air_blast import AirBlastEffects
 
 
 ASSET_ROOT = asset_root()
@@ -29,6 +30,7 @@ class SpriteAnimation:
         self.frames = {}
         self.frame_times = {}
         self.render_rects = {}
+        self.blast_effects = None
         for action, count in ((Action.IDLE, 4), (Action.WALK, 6)):
             frames = []
             for index in range(1, count + 1):
@@ -110,9 +112,20 @@ class SpriteAnimation:
                 if (not isinstance(order, list) or not 1 <= len(order) <= 128
                         or any(type(n) is not int or not 1 <= n <= len(frames) for n in order)):
                     raise ValueError("잘못된 프레임 재생 순서")
+                blast_effects = None
+                if action == Action.AIR_BLAST and "blast_effects" in spec:
+                    if order != list(range(1, 13)):
+                        raise ValueError("AIR_BLAST v1.1은 캐릭터 12자세를 순서대로 재생해야 합니다.")
+                    effects_path = (self.root / spec["blast_effects"]).resolve()
+                    if not effects_path.is_relative_to(self.root.resolve()):
+                        raise ValueError("AIR_BLAST 메타데이터는 자산 폴더 내부여야 합니다.")
+                    blast_effects = AirBlastEffects(effects_path, self._load_frame, canvas, anchor,
+                                                   height, [n / 1000 for n in times])
                 self.frames[action] = [frames[n - 1] for n in order]
                 self.frame_times[action] = [times[n - 1] / 1000 for n in order]
                 self.render_rects[action] = [rects[n - 1] for n in order]
+                if action == Action.AIR_BLAST:
+                    self.blast_effects = blast_effects
             except (OSError, ValueError, TypeError, KeyError) as error:
                 self.warnings.append(f"{name}: {error}")
 
@@ -133,7 +146,11 @@ class SpriteAnimation:
 
     def clip_duration(self, action):
         if action in self.frame_times:
-            return sum(self.frame_times[action])
+            duration = sum(self.frame_times[action])
+            if action == Action.AIR_BLAST and self.blast_effects is not None:
+                effects = self.blast_effects
+                duration = max(duration, effects.launch + effects.flow + effects.fade + .04)
+            return duration
         return len(self.frames.get(action, [])) * DURATIONS.get(action, 0.0)
 
     def advance(self, action, dt):

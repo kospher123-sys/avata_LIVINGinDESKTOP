@@ -3,7 +3,7 @@ import math
 import time
 import logging
 
-from PySide6.QtCore import QPoint, QRectF, Qt, QTimer, QUrl
+from PySide6.QtCore import QPoint, QPointF, QRectF, Qt, QTimer, QUrl
 from PySide6.QtGui import QActionGroup, QPainter, QDesktopServices
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QStyle, QSystemTrayIcon, QWidget
 
@@ -18,6 +18,7 @@ from recovery import GapDetector, is_native_resume
 from diagnostics import log_directory
 from motion_preview import MotionPreview
 from idle_look import IdleLook
+from air_blast import AirBlastEffectWindow
 
 logger = logging.getLogger("aang.overlay")
 
@@ -45,6 +46,7 @@ class AvatarOverlay(QWidget):
         self.paused = False
         self.user_hidden = False
         self._routine_state = None
+        self.blast_window = AirBlastEffectWindow(self)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint
                             | Qt.WindowType.WindowStaysOnTopHint
                             | Qt.WindowType.Tool
@@ -106,6 +108,7 @@ class AvatarOverlay(QWidget):
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(directory)))
 
     def shutdown(self):
+        self.blast_window.present()
         self.timer.stop()
         self.heartbeat.stop()
         self.recovery_timer.stop()
@@ -115,6 +118,7 @@ class AvatarOverlay(QWidget):
 
     def sync_runtime(self):
         self.setVisible(not self.user_hidden and self.display_screen is not None)
+        self._sync_blast_effects()
         if hasattr(self, "timer"):
             if self.paused or self.user_hidden or self.display_screen is None:
                 self.timer.stop()
@@ -225,6 +229,7 @@ class AvatarOverlay(QWidget):
             self.air_trick.cancel()
             self.animation.advance(Action.IDLE, 0)
             self._layout_sprite()
+            self._sync_blast_effects()
             self.update()
 
     def stop_motion_preview(self):
@@ -362,12 +367,26 @@ class AvatarOverlay(QWidget):
         padding = 0
         if self.animation.action == Action.AIR_BLAST:
             rect = self.animation.render_rect
-            # Reserve room for the projectile on either side of the foot anchor.
-            padding = max(0, math.ceil(rect.right() * self.scale - width))
+            # The character needs a small margin for its forward-leaning poses.
+            padding = max(0, math.ceil(-rect.left() * self.scale),
+                          math.ceil(rect.right() * self.scale - width))
         if self.width() != width + 2 * padding or self.height() != height:
             self.setFixedSize(width + 2 * padding, height)
         self._horizontal_padding = padding
         self.move(round(self.avatar.x) - padding, self.y())
+        self._sync_blast_effects()
+
+    def _sync_blast_effects(self):
+        renderer = self.animation.blast_effects
+        if (renderer is None or self.animation.action != Action.AIR_BLAST
+                or self.user_hidden or self.display_screen is None):
+            self.blast_window.present()
+            return
+        ground = QPointF(self.x() + self._horizontal_padding + ANCHOR[0] * self.scale,
+                         self.y() + ANCHOR[1] * self.scale)
+        scene = renderer.scene(self.animation.elapsed, self.display_screen.availableGeometry(),
+                               ground, self.display_height, self.avatar.direction, self.animation.index)
+        self.blast_window.present(renderer, scene)
 
     def _refresh_bounds(self, *args):
         area = self.display_screen.availableGeometry()
@@ -377,6 +396,7 @@ class AvatarOverlay(QWidget):
         self.floor = round(area.bottom() - ANCHOR[1] * self.scale)
         self.avatar.x = max(self.left, min(self.avatar.x, self.right))
         self.move(round(self.avatar.x) - self._horizontal_padding, self.floor)
+        self._sync_blast_effects()
 
     def _setup_tray(self):
         self.menu = QMenu()
@@ -419,6 +439,7 @@ class AvatarOverlay(QWidget):
 
     def _turn(self):
         self.avatar.direction *= -1
+        self._sync_blast_effects()
         self.update()
 
     def set_mode(self, mode):

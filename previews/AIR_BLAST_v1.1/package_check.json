@@ -1,0 +1,9 @@
+{
+  "sha256": "f635244714a04e2987880dc132e033698dfb6694c3f092c9b4f257fe0f019339",
+  "character_frames": 12,
+  "effect_frames": 20,
+  "native_private_replay": "passed",
+  "first_firing_character_index": 6,
+  "all_character_frames_seen": true,
+  "idle_cleanup": true
+}
