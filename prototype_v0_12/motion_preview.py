@@ -2,6 +2,40 @@
 from avatar import Action
 
 
+class ActionShowcase:
+    """One cycle of every loaded clip, in registration order."""
+    def __init__(self):
+        self.items = []
+        self.index = 0
+        self.elapsed = 0.0
+        self.active = False
+
+    @property
+    def action(self):
+        return self.items[self.index][0] if self.active else None
+
+    def start(self, animation):
+        self.items = [(action, animation.clip_duration(action)) for action, frames in animation.frames.items()
+                      if frames and animation.has_clip(action) and animation.clip_duration(action) > 0]
+        self.index = 0
+        self.elapsed = 0.0
+        self.active = bool(self.items)
+        return self.active
+
+    def advance(self, dt):
+        if not self.active:
+            return
+        self.elapsed += max(0.0, dt)
+        if self.elapsed + 1e-9 >= self.items[self.index][1]:
+            self.index += 1
+            self.elapsed = 0.0
+            self.active = self.index < len(self.items)
+
+    def cancel(self):
+        self.active = False
+        self.elapsed = 0.0
+
+
 class MotionPreview:
     def __init__(self):
         self.active = False

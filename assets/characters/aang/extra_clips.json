@@ -108,7 +108,7 @@
       ]
     },
     "air_blast": {
-      "directory": "air_blast_v11/character",
+      "directory": "air_blast_v3/character",
       "prefix": "air_blast",
       "canvas": [
         576,
@@ -133,7 +133,9 @@
         140,
         630
       ],
-      "blast_effects": "air_blast_v11/effects.json"
+      "blast_effects": "air_blast_v3/effects.json",
+      "blast_variant": "v3",
+      "implementation": "AIR_BLAST V3 multi-streak"
     }
   }
 }

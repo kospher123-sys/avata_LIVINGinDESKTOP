@@ -35,14 +35,14 @@ class SettingsDialog(QDialog):
             self.tabs.addTab(page, name)
             forms.append(form)
         display_form, movement_form, routine_form, preview_form = forms
-        preview_hint = QLabel("앉기 → 앉아서 쉬기 → 일어서기를 한 번 보여줍니다.\n크기와 시간표 설정은 바뀌지 않습니다.")
+        preview_hint = QLabel("사용 가능한 모든 동작을 등록 순서대로 한 번씩 보여줍니다.")
         preview_hint.setWordWrap(True)
         preview_form.addRow(preview_hint)
-        self.play_preview = QPushButton("전체 동작 한 번 보기")
+        self.play_preview = QPushButton("모든 동작 살펴보기")
         self.stop_preview = QPushButton("확인 종료")
         for button in (self.play_preview, self.stop_preview):
             button.setAutoDefault(False)
-        self.play_preview.clicked.connect(self.overlay.start_motion_preview)
+        self.play_preview.clicked.connect(self.overlay.start_all_motion_preview)
         self.stop_preview.clicked.connect(self.overlay.stop_motion_preview)
         preview_form.addRow(self.play_preview)
         preview_form.addRow(self.stop_preview)
@@ -211,8 +211,8 @@ class SettingsDialog(QDialog):
 
     def update_status(self):
         animation = self.overlay.animation
-        previewing = self.overlay.motion_preview.active
-        can_play = (animation.has_clip(Action.REST) and not self.overlay.paused
+        previewing = self.overlay.motion_preview.active or self.overlay.showcase.active
+        can_play = (bool(animation.frames) and not self.overlay.paused
                     and not self.overlay.user_hidden and self.overlay.display_screen is not None)
         self.play_preview.setEnabled(can_play and not previewing)
         self.stop_preview.setEnabled(previewing or self.overlay.air_trick.playing)
@@ -223,12 +223,19 @@ class SettingsDialog(QDialog):
                                      and not self.overlay.paused
                                      and not self.overlay.user_hidden and self.overlay.display_screen is not None
                                      and self.overlay.rest_controller.phase is None)
-        self.preview_hint.setText("완료하면 이전 동작 모드로 돌아갑니다. 휴식 시간이면 다시 앉아서 쉽니다."
-                                  if can_play else "휴식 이미지를 준비하고, 캐릭터를 표시·재개한 뒤 사용할 수 있습니다.")
+        if self.overlay.showcase.active:
+            preview = self.overlay.showcase
+            name = getattr(preview.action, "value", str(preview.action))
+            self.preview_hint.setText(f"{preview.index + 1}/{len(preview.items)} · {name}")
+        else:
+            self.preview_hint.setText(f"등록된 동작 {len(animation.frames)}개를 재생합니다."
+                                      if can_play else "캐릭터를 표시·재개한 뒤 사용할 수 있습니다.")
         if animation.has_clip(Action.REST):
             self.asset_status.setText(f"휴식 {len(animation.frames[Action.REST])}프레임 준비됨")
         else:
             self.asset_status.setText("휴식 이미지 준비 중 · 대기 동작 사용")
+        if animation.has_clip(Action.AIR_BLAST):
+            self.asset_status.setText(self.asset_status.text() + " · 공기 충격파 V3")
         if animation.warnings:
             self.asset_status.setText(self.asset_status.text() + " · 일부 이미지 확인 필요")
         self.asset_status.setToolTip("\n".join(animation.warnings))
@@ -245,7 +252,9 @@ class SettingsDialog(QDialog):
             self.status.setText("숨김 · 트레이에서 다시 표시할 수 있어요")
         elif self.overlay.paused:
             self.status.setText("일시정지 · 트레이에서 재개할 수 있어요")
-        elif previewing:
+        elif self.overlay.showcase.active:
+            self.status.setText("모든 동작 확인 중")
+        elif self.overlay.motion_preview.active:
             self.status.setText("동작 확인 · " + {"sitting": "앉는 중", "resting": "앉아서 쉬는 중", "standing": "일어서는 중"}[self.overlay.motion_preview.stage])
         elif self.overlay.idle_look.playing:
             self.status.setText("둘러보는 중")

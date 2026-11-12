@@ -9,7 +9,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from avatar import Action
 from app_paths import asset_root
-from air_blast import AirBlastEffects
+from air_blast_v3 import AirBlastV3Effects
 
 
 ASSET_ROOT = asset_root()
@@ -24,20 +24,21 @@ TRANSITIONS = (Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND, Action.AIR_
 
 
 class SpriteAnimation:
-    def __init__(self, root=ASSET_ROOT):
+    def __init__(self, root=ASSET_ROOT, review_v3=False):
         self.root = Path(root)
         self.warnings = []
         self.frames = {}
         self.frame_times = {}
         self.render_rects = {}
         self.blast_effects = None
+        self.active_versions = {}
         for action, count in ((Action.IDLE, 4), (Action.WALK, 6)):
             frames = []
             for index in range(1, count + 1):
                 path = Path(root) / action.value / f"{action.value}_{index:02}.png"
                 frames.append(self._load_frame(path))
             self.frames[action] = frames
-        for action in (Action.REST, Action.SIT_DOWN, Action.STAND_UP, Action.LOOK_AROUND):
+        for action in (Action.SIT_DOWN, Action.REST, Action.STAND_UP, Action.LOOK_AROUND):
             paths = sorted((self.root / action.value).glob("*.png"))
             if not paths:
                 continue
@@ -119,13 +120,14 @@ class SpriteAnimation:
                     effects_path = (self.root / spec["blast_effects"]).resolve()
                     if not effects_path.is_relative_to(self.root.resolve()):
                         raise ValueError("AIR_BLAST 메타데이터는 자산 폴더 내부여야 합니다.")
-                    blast_effects = AirBlastEffects(effects_path, self._load_frame, canvas, anchor,
-                                                   height, [n / 1000 for n in times])
+                    blast_effects = AirBlastV3Effects(effects_path, self._load_frame, canvas, anchor,
+                                                 height, [n / 1000 for n in times])
                 self.frames[action] = [frames[n - 1] for n in order]
                 self.frame_times[action] = [times[n - 1] / 1000 for n in order]
                 self.render_rects[action] = [rects[n - 1] for n in order]
                 if action == Action.AIR_BLAST:
                     self.blast_effects = blast_effects
+                    self.active_versions[action] = spec.get('implementation', 'AIR_BLAST V3')
             except (OSError, ValueError, TypeError, KeyError) as error:
                 self.warnings.append(f"{name}: {error}")
 
@@ -157,6 +159,8 @@ class SpriteAnimation:
         if action not in self.frames:
             action = Action.IDLE
         if action != self.action:
+            if self.blast_effects is not None and hasattr(self.blast_effects, "reset"):
+                self.blast_effects.reset()
             self.action = action
             self.elapsed = 0.0
         else:

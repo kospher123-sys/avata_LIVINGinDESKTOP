@@ -73,10 +73,10 @@ class AirTrickTests(unittest.TestCase):
 
     def test_missing_blast_frame_disables_only_blast(self):
         root = Path(self.directory.name) / "aang"
-        for name in ("idle", "walk", "frames_look_around", "air_trick", "air_blast_v11"):
+        for name in ("idle", "walk", "frames_look_around", "air_trick", "air_blast_v3"):
             shutil.copytree(ASSET_ROOT / name, root / name)
         shutil.copy2(ASSET_ROOT / "extra_clips.json", root)
-        (root / "air_blast_v11/character/air_blast_04.png").unlink()
+        (root / "air_blast_v3/character/air_blast_04.png").unlink()
         animation = SpriteAnimation(root)
         self.assertTrue(any("air_blast" in warning for warning in animation.warnings))
         self.assertTrue(animation.has_clip(Action.AIR_TRICK))

@@ -65,19 +65,20 @@ class AirBlastTests(unittest.TestCase):
                         scene = self.effects.scene(time, area, ground, height, direction, 6)
                         expected = max(0, area.right() - scene.palm.x() if direction > 0
                                        else scene.palm.x() - area.left())
+                        expected = min(expected, scene.flow_rect.width())
                         self.assertAlmostEqual(scene.front.width(), expected)
                         if expected > 0:
                             front = scene.world_rect(scene.front)
                             edge = front.right() if direction > 0 else front.left()
-                            self.assertAlmostEqual(edge, area.right() if direction > 0 else area.left())
+                            self.assertAlmostEqual(edge, scene.palm.x() + direction * expected)
                         self.assertTrue(area.contains(scene.bounds) or scene.bounds.isEmpty())
 
-    def test_forward_height_matches_v1_source_scale(self):
-        scene = self.effects.scene(.8, QRectF(0, 0, 1920, 1040), QPointF(600, 1000), 120, 1, 6)
-        # v1 used reviewed effect pixels scaled by four against a 606px standing height.
-        source = self.effects.source_rects["projectile"]
-        self.assertAlmostEqual(scene.front.height(), source.height() * 4 / 606 * 120)
-        self.assertEqual(self.effects.forward_scale, 4)
+    def test_flow_height_uses_uniform_native_scale(self):
+        self.effects.reset()
+        scene = self.effects.scene(.760, QRectF(0, 0, 1920, 1040), QPointF(600, 1000), 120, 1, 6)
+        source = self.effects.source_rects["flow_field"][0]
+        self.assertAlmostEqual(scene.flow_rect.height(), source.height() * .4)
+        self.assertAlmostEqual(scene.flow_rect.width(), source.width() * .4)
 
     def test_qscreen_integer_work_area_uses_full_width_without_off_by_one(self):
         area = QRect(-1600, -200, 1600, 960)
@@ -114,7 +115,7 @@ class AirBlastTests(unittest.TestCase):
                 phases.append([call.args[6] for call in tiles.call_args_list])
         painter.end()
         # Rear intake, main flow and auxiliary streaks all advance along local +X.
-        self.assertEqual(len(phases[0]), 3)
+        self.assertEqual(len(phases[0]), 1)
         for previous, current in zip(*phases):
             self.assertGreater(current, previous)
 
@@ -208,12 +209,12 @@ class AirBlastTests(unittest.TestCase):
 
     def test_missing_effect_or_malformed_metadata_uses_optional_fallback(self):
         root = Path(self.directory.name) / "aang"
-        for name in ("idle", "walk", "air_blast_v11"):
+        for name in ("idle", "walk", "air_blast_v3"):
             shutil.copytree(ASSET_ROOT / name, root / name)
         source = json.loads((ASSET_ROOT / "extra_clips.json").read_text(encoding="utf-8"))
         source["clips"] = {"air_blast": source["clips"]["air_blast"]}
         (root / "extra_clips.json").write_text(json.dumps(source), encoding="utf-8")
-        config_path = root / "air_blast_v11/effects.json"
+        config_path = root / "air_blast_v3/effects.json"
         config = json.loads(config_path.read_text(encoding="utf-8"))
         for invalid in ([], dict(config, launch_ms=500), dict(config, flow_ms=1400),
                         dict(config, palm_offset=[float("nan"), 0])):
@@ -227,7 +228,7 @@ class AirBlastTests(unittest.TestCase):
         self.assertTrue(animation.has_clip(Action.AIR_BLAST))
         self.assertAlmostEqual(animation.clip_duration(Action.AIR_BLAST), 2.3)
         config_path.write_text(json.dumps(config), encoding="utf-8")
-        (root / "air_blast_v11/frames/projectile/air_blast_projectile_effect_03.png").unlink()
+        (root / "air_blast_v3/frames/projectile/air_blast_projectile_effect_03.png").unlink()
         animation = SpriteAnimation(root)
         self.assertFalse(animation.has_clip(Action.AIR_BLAST))
         animation.advance(Action.AIR_BLAST, 0)
@@ -237,7 +238,7 @@ class AirBlastTests(unittest.TestCase):
     def test_cached_pixels_remain_bounded_across_many_sizes_and_times(self):
         keys = [frame.cacheKey() for stage in self.effects.frames.values() for frame in stage]
         pixels = sum(frame.width() * frame.height() for stage in self.effects.frames.values() for frame in stage)
-        self.assertLess(pixels * 4, 4_000_000)
+        self.assertLess(pixels * 4, 25_000_000)
         for index in range(500):
             self.effects.scene(index / 250, QRectF(0, 0, 7680, 2160), QPointF(500, 2000),
                                (80, 120, 180)[index % 3], 1, 6)

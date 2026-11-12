@@ -75,11 +75,11 @@ class MotionPreviewTests(unittest.TestCase):
         dialog.tabs.setCurrentIndex(3)
         self.assertTrue(dialog.play_preview.isEnabled())
         dialog.play_preview.click()
-        self.assertTrue(window.motion_preview.active)
+        self.assertTrue(window.showcase.active)
         self.assertFalse(dialog.play_preview.isEnabled())
         self.assertTrue(dialog.stop_preview.isEnabled())
         dialog.stop_preview.click()
-        self.assertFalse(window.motion_preview.active)
+        self.assertFalse(window.showcase.active)
         self.assertTrue(dialog.isVisible())
         self.assertEqual(SettingsStore(self.path).load(), Preferences())
 

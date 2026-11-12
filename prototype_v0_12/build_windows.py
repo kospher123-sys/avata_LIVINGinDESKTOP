@@ -12,8 +12,9 @@ def main():
         raise SystemExit("Windows에서 실행해 주세요.")
     source = Path(__file__).resolve().parent
     root = source.parent
-    output = root / "dist" / "AangOverlay-v0.12"
-    work = root / "build" / "v0.12"
+    name = "AangOverlay-AIR_BLAST-V3"
+    output = root / "dist" / name
+    work = root / "build" / "air-blast-v3"
     work.mkdir(parents=True, exist_ok=True)
     # Keep unrelated programs on PATH out of PyInstaller's DLL discovery.
     env = os.environ.copy()
@@ -33,7 +34,8 @@ def main():
             target.mkdir(parents=True, exist_ok=True)
             for frame in folder.glob("*.png"):
                 shutil.copy2(frame, target / frame.name)
-    for manifest_name in ("clips.json", "extra_clips.json"):
+    manifests = ("clips.json", "extra_clips.json")
+    for manifest_name in manifests:
         manifest_path = assets / manifest_name
         if not manifest_path.exists():
             continue
@@ -59,7 +61,8 @@ def main():
     shutil.copy2(source / "README.md", output / "README.md")
     shutil.copy2(root / "docs/REST_ASSET_IMPORT.md", output / "REST_ASSET_IMPORT.md")
     executable = output / f"{output.name}.exe"
-    subprocess.run([str(executable), "--check-package"],
+    check_args = [str(executable), "--check-package"]
+    subprocess.run(check_args,
                    check=True, timeout=30, cwd=output)
     print(executable)
 

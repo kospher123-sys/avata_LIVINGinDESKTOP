@@ -1,0 +1,622 @@
+{
+  "launch_ms": 760,
+  "flow_ms": 840,
+  "fade_ms": 360,
+  "palms": [
+    [
+      445,
+      230
+    ],
+    [
+      470,
+      234
+    ]
+  ],
+  "palm_offset": [
+    4,
+    0
+  ],
+  "body_bounds": [
+    [
+      217,
+      44,
+      359,
+      653
+    ],
+    [
+      137,
+      77,
+      395,
+      653
+    ],
+    [
+      94,
+      116,
+      418,
+      653
+    ],
+    [
+      63,
+      149,
+      441,
+      652
+    ],
+    [
+      69,
+      123,
+      446,
+      653
+    ],
+    [
+      63,
+      133,
+      447,
+      653
+    ],
+    [
+      56,
+      132,
+      488,
+      653
+    ],
+    [
+      53,
+      132,
+      486,
+      653
+    ],
+    [
+      71,
+      107,
+      503,
+      653
+    ],
+    [
+      103,
+      90,
+      456,
+      653
+    ],
+    [
+      173,
+      59,
+      416,
+      653
+    ],
+    [
+      213,
+      50,
+      351,
+      653
+    ]
+  ],
+  "version": 3,
+  "flow_scale_at_120": 0.4,
+  "effect_scale_at_120": 0.45,
+  "cast_scale_at_120": 0.22,
+  "dissipate_scale_at_120": 0.3,
+  "flow_frame_ms": 60,
+  "projectile_frame_ms": 70,
+  "flow_opacity": 0.7,
+  "projectile_heights_per_second": 6,
+  "backdraft_width_heights": 0.8,
+  "backdraft_opacity": 0.35,
+  "review_status": "WARNING: FLOW 02/06/07 artifacts, FLOW 08 generated candidate and loop unapproved",
+  "frames": {
+    "cast": [
+      {
+        "file": "frames/cast/air_blast_cast_effect_01.png",
+        "bbox": [
+          205,
+          239,
+          381,
+          453
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/cast/air_blast_cast_effect_02.png",
+        "bbox": [
+          124,
+          227,
+          468,
+          475
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/cast/air_blast_cast_effect_03.png",
+        "bbox": [
+          92,
+          219,
+          525,
+          492
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/cast/air_blast_cast_effect_04.png",
+        "bbox": [
+          66,
+          209,
+          519,
+          492
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      }
+    ],
+    "projectile": [
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_01.png",
+        "bbox": [
+          137,
+          233,
+          445,
+          444
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_02.png",
+        "bbox": [
+          141,
+          234,
+          444,
+          445
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_03.png",
+        "bbox": [
+          142,
+          225,
+          439,
+          444
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_04.png",
+        "bbox": [
+          146,
+          222,
+          433,
+          443
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_05.png",
+        "bbox": [
+          145,
+          221,
+          435,
+          443
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/projectile/air_blast_projectile_effect_06.png",
+        "bbox": [
+          134,
+          224,
+          439,
+          441
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      }
+    ],
+    "dissipate": [
+      {
+        "file": "frames/dissipate/air_blast_dissipate_effect_01.png",
+        "bbox": [
+          73,
+          180,
+          539,
+          537
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/dissipate/air_blast_dissipate_effect_02.png",
+        "bbox": [
+          76,
+          186,
+          501,
+          504
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/dissipate/air_blast_dissipate_effect_03.png",
+        "bbox": [
+          97,
+          265,
+          430,
+          481
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/dissipate/air_blast_dissipate_effect_04.png",
+        "bbox": null,
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      }
+    ],
+    "backdraft": [
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_01.png",
+        "bbox": [
+          205,
+          278,
+          370,
+          401
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_02.png",
+        "bbox": [
+          198,
+          272,
+          381,
+          405
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_03.png",
+        "bbox": [
+          183,
+          250,
+          385,
+          423
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_04.png",
+        "bbox": [
+          151,
+          254,
+          411,
+          412
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_05.png",
+        "bbox": [
+          182,
+          276,
+          390,
+          399
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      },
+      {
+        "file": "frames/backdraft/air_blast_backdraft_effect_06.png",
+        "bbox": [
+          176,
+          289,
+          302,
+          373
+        ],
+        "canvas": [
+          576,
+          704
+        ],
+        "anchor": [
+          288,
+          352
+        ]
+      }
+    ],
+    "flow_field": [
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_01.png",
+        "bbox": [
+          70,
+          112,
+          1992,
+          400
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_02.png",
+        "bbox": [
+          24,
+          142,
+          2010,
+          371
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_03.png",
+        "bbox": [
+          36,
+          134,
+          1993,
+          378
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_04.png",
+        "bbox": [
+          57,
+          125,
+          1981,
+          388
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_05.png",
+        "bbox": [
+          47,
+          149,
+          2003,
+          362
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_06.png",
+        "bbox": [
+          175,
+          127,
+          1862,
+          390
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_07.png",
+        "bbox": [
+          32,
+          134,
+          2007,
+          377
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      },
+      {
+        "file": "frames/flow_field/air_blast_flow_field_effect_08.png",
+        "bbox": [
+          297,
+          140,
+          1759,
+          372
+        ],
+        "canvas": [
+          2048,
+          512
+        ],
+        "anchor": [
+          0,
+          256
+        ]
+      }
+    ]
+  },
+  "projectiles": [
+    {
+      "delay_ms": 0,
+      "start_heights": 0,
+      "y_heights": 0,
+      "scale": 0.45,
+      "speed": 6,
+      "phase": 0
+    },
+    {
+      "delay_ms": 20,
+      "start_heights": 0.8,
+      "y_heights": -0.18,
+      "scale": 0.28,
+      "speed": 8,
+      "phase": 2
+    },
+    {
+      "delay_ms": 60,
+      "start_heights": 2.1,
+      "y_heights": 0.16,
+      "scale": 0.32,
+      "speed": 5,
+      "phase": 4
+    },
+    {
+      "delay_ms": 110,
+      "start_heights": 3.2,
+      "y_heights": -0.06,
+      "scale": 0.24,
+      "speed": 9,
+      "phase": 1
+    }
+  ]
+}
